@@ -8,5 +8,3 @@ Desenvolvedores: Caio Pereira, JoÃ£o Stabile, Rebecca Amaral, e Tauan Souza
 A ideia do nosso trabalho se consiste em jogo 2D de Tower Defense, muito inspirado no Plants vs. Zombies, com o tema de parques ambientais sendo consumidos pelas grandes metropoles.
 
 VocÃª como jogador deve possicionar os animas e plantas para proteger a floresta da entrada dos humanos.
-
-NÃO É UM TESTE

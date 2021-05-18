@@ -1,5 +1,52 @@
 package Pck_Game;
 
-public class Personagens {
-	//this is a personagem class
+import java.awt.Graphics;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
+
+public abstract class Personagens {
+	private int x, y;
+	private int width, height;
+	private Image img;
+	
+	public Personagens(int x, int y, String path) {
+		this.x = x;
+		this.y = y;
+		
+		ImageIcon ss = new ImageIcon(path);
+		img = ss.getImage();
+		width = img.getWidth(null);
+		height = img.getHeight(null);
+	}
+	
+	public void draw(Graphics g) {
+		g.drawImage(img, x, y, null);
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+	
+	
 }
