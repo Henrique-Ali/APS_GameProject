@@ -16,8 +16,16 @@ public class Ataque extends Personagens implements ActionListener{
 		timer.start();
 	}
 	
-	public void actionPerformed(ActionEvent e) {
-		setX(getX()+2);
-		
+	public void actionPerformed(ActionEvent e) {	
+		setX(getX()+4);
 	}
+
+	public void setPausa(boolean pausa) {
+		if (pausa == false) {
+			timer.start();
+		} else {
+			timer.stop();
+		}
+	}
+	
 }

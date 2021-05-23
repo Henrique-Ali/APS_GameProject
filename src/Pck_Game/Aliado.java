@@ -13,7 +13,7 @@ public class Aliado extends Personagens implements ActionListener{
 	
 	public Aliado(int x, int y) {
 		super(x, y, "img\\sPlayer.png");
-		timer = new Timer(3000,this);
+		timer = new Timer(2000,this);
 		timer.start();
 	}
 
@@ -38,6 +38,14 @@ public class Aliado extends Personagens implements ActionListener{
 
 	public void setAtaque(ArrayList<Ataque> ataque) {
 		this.ataque = ataque;
+	}
+	
+	public void setPausa(boolean pausa) {
+		if (pausa == false) {
+			timer.start();
+		} else {
+			timer.stop();
+		}
 	}
 	
 }
