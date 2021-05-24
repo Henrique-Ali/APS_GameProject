@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -14,8 +15,13 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+import java.awt.event.MouseAdapter;
+
 
 public class GamePanel extends JPanel implements ActionListener {
 	private ArrayList<Inimigo> inimigos = new ArrayList<Inimigo>();
@@ -27,6 +33,7 @@ public class GamePanel extends JPanel implements ActionListener {
 	private Timer timer, timerSpawn;
 	private MyListeners mList = new MyListeners();
 	private Random random;
+	JFrame f = (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, this);
 
 	public GamePanel() {
 		this.setBackground(Color.black);
@@ -35,6 +42,7 @@ public class GamePanel extends JPanel implements ActionListener {
 		this.addMouseListener(mList);
 		this.addMouseMotionListener(mList);
 		
+		
 		timer = new Timer(1, this);
 		timer.start();
 		timerSpawn = new Timer(1000, this);
@@ -42,8 +50,32 @@ public class GamePanel extends JPanel implements ActionListener {
 		
 		random = new Random();
 		
+		JPanel panel = new JPanel();
+		panel.setBounds(new Rectangle(0, 0, 1280, 720));
+		add(panel);
+		panel.setLayout(null);
+		
+		JLabel lblNewLabel_1 = new JLabel("New label");
+		lblNewLabel_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+
+				//TO DO
+				
+			}
+		});
+		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\mccai\\Desktop\\tela pause\\botao-home.png"));
+		lblNewLabel_1.setBounds(974, 25, 296, 107);
+		panel.add(lblNewLabel_1);
+		
 	}
-	
+	public void setPausa(boolean pausa) {
+		this.pausa = pausa;
+	}
+	public boolean getPausa() {
+		return this.pausa;
+	}
+
 	public void paint(Graphics g) {
 		super.paint(g);
 //////////////////////////////////////////////////////////////////////////////////
@@ -96,8 +128,10 @@ public class GamePanel extends JPanel implements ActionListener {
 			ind.draw(g);
 		}
 		
+		// botao pause
 		g.fillRect(1200, 10, 20, 20);
-		g.fillRect(1100, 10, 20, 20);
+		
+		g.drawImage(new ImageIcon("img\\sBtnHome.png").getImage(), 1070, 10, this);
 		
 		
 		g.setColor(new Color(176, 109, 76));
@@ -118,8 +152,12 @@ public class GamePanel extends JPanel implements ActionListener {
 				atk.draw(g);
 			}
 		}
+		
+		
+		
 	}
-
+	
+	
 	public void reset() {
 		inimigos = new ArrayList<Inimigo>();
 		aliados = new ArrayList<Aliado>();
@@ -180,7 +218,7 @@ public class GamePanel extends JPanel implements ActionListener {
 				}
 			}
 			
-			if (e.getX() > 1200 && e.getX() < 1220 && e.getY() > 10 && e.getY() < 30) {
+			if (e.getX() > 1070 && e.getX() < 1267 && e.getY() > 10 && e.getY() < 107) {
 				if (pausa == false) {
 					timer.stop();
 					timerSpawn.stop();
@@ -192,7 +230,7 @@ public class GamePanel extends JPanel implements ActionListener {
 							Ataque atk = ind.getAtaque().get(j);
 							atk.setPausa(pausa);
 						}
-					}
+					}			
 				} else {
 					timer.start();
 					timerSpawn.start();
@@ -212,6 +250,8 @@ public class GamePanel extends JPanel implements ActionListener {
 				reset();
 			}
 		}
+
+		
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
