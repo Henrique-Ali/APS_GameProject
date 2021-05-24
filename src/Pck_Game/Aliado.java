@@ -27,8 +27,9 @@ public class Aliado extends Personagens implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		ataque.add(new Ataque(this.getX()+this.getWidth(),this.getY()+this.getHeight()/2));
+		if (toContruct) {
+			ataque.add(new Ataque(this.getX()+this.getWidth(),this.getY()+this.getHeight()/2));
+		}
 		
 	}
 

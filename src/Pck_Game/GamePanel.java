@@ -20,6 +20,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+
+import Pck_Menu.Home;
+
 import java.awt.event.MouseAdapter;
 
 
@@ -28,12 +31,14 @@ public class GamePanel extends JPanel implements ActionListener {
 	private ArrayList<Aliado> aliados = new ArrayList<Aliado>();
 	private static final int SCREEN_WIDTH = 1280;
 	private static final int SCREEN_HEIGHT = 720;
+	private int[][] matrizMapa = new int[4][7];
 	private int mX, mY;
 	private boolean pausa = false;
+	private boolean fechar = false;
+	private boolean musica = true;
 	private Timer timer, timerSpawn;
 	private MyListeners mList = new MyListeners();
 	private Random random;
-	JFrame f = (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, this);
 
 	public GamePanel() {
 		this.setBackground(Color.black);
@@ -50,32 +55,20 @@ public class GamePanel extends JPanel implements ActionListener {
 		
 		random = new Random();
 		
-		JPanel panel = new JPanel();
-		panel.setBounds(new Rectangle(0, 0, 1280, 720));
-		add(panel);
-		panel.setLayout(null);
-		
-		JLabel lblNewLabel_1 = new JLabel("New label");
-		lblNewLabel_1.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-
-				//TO DO
-				
-			}
-		});
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\mccai\\Desktop\\tela pause\\botao-home.png"));
-		lblNewLabel_1.setBounds(974, 25, 296, 107);
-		panel.add(lblNewLabel_1);
-		
 	}
+	
 	public void setPausa(boolean pausa) {
 		this.pausa = pausa;
 	}
+	
 	public boolean getPausa() {
 		return this.pausa;
 	}
-
+	
+	public boolean getFechar() {
+		return this.fechar;
+	}
+	
 	public void paint(Graphics g) {
 		super.paint(g);
 //////////////////////////////////////////////////////////////////////////////////
@@ -129,10 +122,9 @@ public class GamePanel extends JPanel implements ActionListener {
 		}
 		
 		// botao pause
-		g.fillRect(1200, 10, 20, 20);
-		
-		g.drawImage(new ImageIcon("img\\sBtnHome.png").getImage(), 1070, 10, this);
-		
+		if (pausa == false) {
+			g.drawImage(new ImageIcon("img\\sBtnHome.png").getImage(), 1070, 10, this);
+		}
 		
 		g.setColor(new Color(176, 109, 76));
 		g.fillRect(0, 80, 150, SCREEN_HEIGHT - 160);
@@ -153,7 +145,12 @@ public class GamePanel extends JPanel implements ActionListener {
 			}
 		}
 		
-		
+		if (pausa) {
+			g.drawImage(new ImageIcon("img\\sBtnHome.png").getImage(), SCREEN_WIDTH/2 - 99, SCREEN_HEIGHT/2 - 136, this);
+			g.drawImage(new ImageIcon("img\\sBtnHome.png").getImage(), SCREEN_WIDTH/2 - 99, SCREEN_HEIGHT/2 - 36, this);
+			g.drawImage(new ImageIcon("img\\sBtnHome.png").getImage(), SCREEN_WIDTH/2 - 99, SCREEN_HEIGHT/2 + 64, this);
+			g.drawImage(new ImageIcon("img\\sBtnHome.png").getImage(), SCREEN_WIDTH/2 - 99, SCREEN_HEIGHT/2 + 164, this);
+		}
 		
 	}
 	
@@ -161,6 +158,7 @@ public class GamePanel extends JPanel implements ActionListener {
 	public void reset() {
 		inimigos = new ArrayList<Inimigo>();
 		aliados = new ArrayList<Aliado>();
+		matrizMapa = new int[4][7];
 	}
 
 	@Override
@@ -218,7 +216,7 @@ public class GamePanel extends JPanel implements ActionListener {
 				}
 			}
 			
-			if (e.getX() > 1070 && e.getX() < 1267 && e.getY() > 10 && e.getY() < 107) {
+			if (e.getX() > 1070 && e.getX() < 1268 && e.getY() > 10 && e.getY() < 108) {
 				if (pausa == false) {
 					timer.stop();
 					timerSpawn.stop();
@@ -230,8 +228,11 @@ public class GamePanel extends JPanel implements ActionListener {
 							Ataque atk = ind.getAtaque().get(j);
 							atk.setPausa(pausa);
 						}
-					}			
-				} else {
+					}	
+					repaint();
+				}
+			}else if (e.getX() > SCREEN_WIDTH/2 - 100 && e.getX() < SCREEN_WIDTH/2 + 100 && e.getY() > SCREEN_HEIGHT/2 - 136 && e.getY() < SCREEN_HEIGHT/2 - 64) {
+				if(pausa == true) {
 					timer.start();
 					timerSpawn.start();
 					pausa = false;
@@ -244,7 +245,29 @@ public class GamePanel extends JPanel implements ActionListener {
 						}
 					}
 				}
+			}else if (e.getX() > SCREEN_WIDTH/2 - 100 && e.getX() < SCREEN_WIDTH/2 + 100 && e.getY() > SCREEN_HEIGHT/2 - 36 && e.getY() < SCREEN_HEIGHT/2 + 36) {
+				if(pausa == true) {
+					timer.start();
+					timerSpawn.start();
+					pausa = false;
+					reset();
+				}
+			}else if (e.getX() > SCREEN_WIDTH/2 - 100 && e.getX() < SCREEN_WIDTH/2 + 100 && e.getY() > SCREEN_HEIGHT/2 + 64 && e.getY() < SCREEN_HEIGHT/2 + 136) {
+				if(pausa == true) {
+					if(musica) {
+						musica = false;
+					}else {
+						musica = true;
+					}
+					System.out.println(musica);
+				}
+			}else if (e.getX() > SCREEN_WIDTH/2 - 100 && e.getX() < SCREEN_WIDTH/2 + 100 && e.getY() > SCREEN_HEIGHT/2 + 164 && e.getY() < SCREEN_HEIGHT/2 + 236) {
+				if(pausa == true) {
+					new Home().setVisible(true);
+					fechar = true;
+				}
 			}
+			
 			
 			if (e.getX() > 1100 && e.getX() < 1120 && e.getY() > 10 && e.getY() < 30) {
 				reset();
@@ -259,11 +282,14 @@ public class GamePanel extends JPanel implements ActionListener {
 				Aliado ind = aliados.get(i);
 				if (ind.isToContruct() == false) {
 					if(mX > 200 && mX < 900 && mY > 240 && mY < SCREEN_HEIGHT-80) {
-						ind.setX(200+(100*((mX-200)/100))-2);
-						ind.setY(240+(100*((mY-240)/100))+2);
-						ind.setToContruct(true);
-						
-						
+						if(matrizMapa[(mY-240)/100][(mX-200)/100] == 0) {
+							matrizMapa[(mY-240)/100][(mX-200)/100] = 1;
+							ind.setX(200+(100*((mX-200)/100))-2);
+							ind.setY(240+(100*((mY-240)/100))+2);
+							ind.setToContruct(true);
+						}else {
+							aliados.remove(i);
+						}
 					}else {
 						aliados.remove(i);
 					}

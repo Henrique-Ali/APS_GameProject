@@ -2,21 +2,21 @@ package Pck_Game;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.Timer;
 
-public class GameFrame extends JFrame{
-
-	public GameFrame() {
-		// Menu Pause
-		GamePause gamePause = new GamePause();
-		
-		
-		
+public class GameFrame extends JFrame implements ActionListener{
+	private GamePanel gamePanel = new GamePanel();
+	private Timer timer;
+	
+	public GameFrame() {	
 		// Tela do jogo
-		GamePanel gamePanel = new GamePanel();
+		
 		this.add(gamePanel);
 	
 		this.setResizable(false);
@@ -26,11 +26,14 @@ public class GameFrame extends JFrame{
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		
-		
+		timer = new Timer(1, this);
+		timer.start();
 		
 	}
-	
-
-	
-
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (gamePanel.getFechar()) {
+			dispose();
+		}
+	}
 }
