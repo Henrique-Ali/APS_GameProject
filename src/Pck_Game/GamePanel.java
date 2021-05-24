@@ -123,7 +123,7 @@ public class GamePanel extends JPanel implements ActionListener {
 		
 		// botao pause
 		if (pausa == false) {
-			g.drawImage(new ImageIcon("img\\sBtnHome.png").getImage(), 1070, 10, this);
+			g.drawImage(new ImageIcon("img\\sBtnAvancar.png").getImage(), SCREEN_WIDTH - 120, 20, this);
 		}
 		
 		g.setColor(new Color(176, 109, 76));
@@ -146,12 +146,19 @@ public class GamePanel extends JPanel implements ActionListener {
 		}
 		
 		if (pausa) {
-			g.drawImage(new ImageIcon("img\\sBtnHome.png").getImage(), SCREEN_WIDTH/2 - 99, SCREEN_HEIGHT/2 - 136, this);
-			g.drawImage(new ImageIcon("img\\sBtnHome.png").getImage(), SCREEN_WIDTH/2 - 99, SCREEN_HEIGHT/2 - 36, this);
-			g.drawImage(new ImageIcon("img\\sBtnHome.png").getImage(), SCREEN_WIDTH/2 - 99, SCREEN_HEIGHT/2 + 64, this);
-			g.drawImage(new ImageIcon("img\\sBtnHome.png").getImage(), SCREEN_WIDTH/2 - 99, SCREEN_HEIGHT/2 + 164, this);
+			g.drawImage(new ImageIcon("img\\backgroundPause.jpg").getImage(), 0, 0, this);
+			g.drawImage(new ImageIcon("img\\sBtnAvancar.png").getImage(), SCREEN_WIDTH - 120, 20, this);
+			
+
+			g.drawImage(new ImageIcon("img\\sBtnReset.png").getImage(), SCREEN_WIDTH/2 + 96, SCREEN_HEIGHT/2 - 36, this);
+			g.drawImage(new ImageIcon("img\\sBtnHome.png").getImage(), SCREEN_WIDTH/2 - 96, SCREEN_HEIGHT/2 + 72, this);
+			
+			if(musica) {
+				g.drawImage(new ImageIcon("img\\sBtnSomOn.png").getImage(), SCREEN_WIDTH/3 - 96, SCREEN_HEIGHT/2 - 36, this);
+			}else {
+				g.drawImage(new ImageIcon("img\\sBtnSomOff.png").getImage(), SCREEN_WIDTH/3 - 96, SCREEN_HEIGHT/2 - 36, this);
+			}
 		}
-		
 	}
 	
 	
@@ -216,7 +223,8 @@ public class GamePanel extends JPanel implements ActionListener {
 				}
 			}
 			
-			if (e.getX() > 1070 && e.getX() < 1268 && e.getY() > 10 && e.getY() < 108) {
+			// Botão de Pausa e Continue
+			if (e.getX() > SCREEN_WIDTH - 120 && e.getX() < SCREEN_WIDTH - 40 && e.getY() > 20 && e.getY() < 100) {
 				if (pausa == false) {
 					timer.stop();
 					timerSpawn.stop();
@@ -230,9 +238,7 @@ public class GamePanel extends JPanel implements ActionListener {
 						}
 					}	
 					repaint();
-				}
-			}else if (e.getX() > SCREEN_WIDTH/2 - 100 && e.getX() < SCREEN_WIDTH/2 + 100 && e.getY() > SCREEN_HEIGHT/2 - 136 && e.getY() < SCREEN_HEIGHT/2 - 64) {
-				if(pausa == true) {
+				}else if(pausa == true) {
 					timer.start();
 					timerSpawn.start();
 					pausa = false;
@@ -245,23 +251,27 @@ public class GamePanel extends JPanel implements ActionListener {
 						}
 					}
 				}
-			}else if (e.getX() > SCREEN_WIDTH/2 - 100 && e.getX() < SCREEN_WIDTH/2 + 100 && e.getY() > SCREEN_HEIGHT/2 - 36 && e.getY() < SCREEN_HEIGHT/2 + 36) {
+			// Botão Reset	
+			}else if (e.getX() > SCREEN_WIDTH/2 + 96 && e.getX() < SCREEN_WIDTH/2 + 268 && e.getY() > SCREEN_HEIGHT/2 - 36 && e.getY() < SCREEN_HEIGHT/2 + 36) {
 				if(pausa == true) {
 					timer.start();
 					timerSpawn.start();
 					pausa = false;
 					reset();
 				}
-			}else if (e.getX() > SCREEN_WIDTH/2 - 100 && e.getX() < SCREEN_WIDTH/2 + 100 && e.getY() > SCREEN_HEIGHT/2 + 64 && e.getY() < SCREEN_HEIGHT/2 + 136) {
+			// Botão Sound	
+			}else if (e.getX() > SCREEN_WIDTH/3 - 96 && e.getX() < SCREEN_WIDTH/3 + 72 && e.getY() > SCREEN_HEIGHT/2 - 36 && e.getY() < SCREEN_HEIGHT/2 + 36) {
 				if(pausa == true) {
 					if(musica) {
 						musica = false;
+						
 					}else {
 						musica = true;
 					}
-					System.out.println(musica);
 				}
-			}else if (e.getX() > SCREEN_WIDTH/2 - 100 && e.getX() < SCREEN_WIDTH/2 + 100 && e.getY() > SCREEN_HEIGHT/2 + 164 && e.getY() < SCREEN_HEIGHT/2 + 236) {
+				repaint();
+			// Botão Home
+			}else if (e.getX() > SCREEN_WIDTH/2 - 96 && e.getX() < SCREEN_WIDTH/2 + 102 && e.getY() > SCREEN_HEIGHT/2 + 72 && e.getY() < SCREEN_HEIGHT/2 + 144) {
 				if(pausa == true) {
 					new Home().setVisible(true);
 					fechar = true;
