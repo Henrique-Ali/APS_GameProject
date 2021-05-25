@@ -8,11 +8,14 @@ import javax.swing.ImageIcon;
 public abstract class Personagens {
 	private int x, y;
 	private int width, height;
+	private int life;
 	private Image img;
 	
 	public Personagens(int x, int y, String path) {
 		this.x = x;
 		this.y = y;
+		
+		life = 100;
 		
 		ImageIcon ss = new ImageIcon(path);
 		img = ss.getImage();
@@ -40,6 +43,14 @@ public abstract class Personagens {
 		this.y = y;
 	}
 
+	public int getLife() {
+		return life;
+	}
+
+	public void setLife(int life) {
+		this.life = life;
+	}
+	
 	public int getWidth() {
 		return width;
 	}

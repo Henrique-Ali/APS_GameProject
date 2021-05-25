@@ -24,13 +24,20 @@ public class Aliado extends Personagens implements ActionListener{
 	public void setToContruct(boolean toContruct) {
 		this.toContruct = toContruct;
 	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (toContruct) {
+	
+	public void addAtaque(int[] positionInd) {
+		int y = (this.getY()-240)/100;
+		System.out.println("tiro "+y);
+		if (positionInd[y] > 0) {
 			ataque.add(new Ataque(this.getX()+this.getWidth(),this.getY()+this.getHeight()/2));
 		}
-		
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+//		if (toContruct) {
+//			ataque.add(new Ataque(this.getX()+this.getWidth(),this.getY()+this.getHeight()/2));
+//		}
+	
 	}
 
 	public ArrayList<Ataque> getAtaque() {

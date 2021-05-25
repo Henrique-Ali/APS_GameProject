@@ -36,10 +36,12 @@ public class GamePanel extends JPanel implements ActionListener {
 	private boolean pausa = false;
 	private boolean fechar = false;
 	private boolean musica = true;
-	private Timer timer, timerSpawn;
+	private Timer timer, timerSpawn, timerAttack;
 	private MyListeners mList = new MyListeners();
 	private Random random;
 
+	public int [] positionIni = new int[4];
+	
 	public GamePanel() {
 		this.setBackground(Color.black);
 		this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -50,8 +52,10 @@ public class GamePanel extends JPanel implements ActionListener {
 		
 		timer = new Timer(1, this);
 		timer.start();
-		timerSpawn = new Timer(1000, this);
+		timerSpawn = new Timer(3000, this);
 		timerSpawn.start();
+		timerAttack = new Timer(1000, this);
+		timerAttack.start();
 		
 		random = new Random();
 		
@@ -67,6 +71,23 @@ public class GamePanel extends JPanel implements ActionListener {
 	
 	public boolean getFechar() {
 		return this.fechar;
+	}
+	
+	public void addPositionInd(int y) {
+		int indY = (y-240)/100;
+		if(indY > 0) {
+			positionIni[indY] += 1;
+				System.out.println("addposition"+indY+" "+positionIni[indY]+"  ");
+			
+		}
+	}
+	public void removePositionInd(int y) {
+		int indY = (y-240)/100;
+		if(indY > 0) {
+			positionIni[indY] -= 1;
+				System.out.println("removeposition"+indY+" "+positionIni[indY]+"  ");
+			
+		}
 	}
 	
 	public void paint(Graphics g) {
@@ -118,7 +139,7 @@ public class GamePanel extends JPanel implements ActionListener {
 		
 		for(int i = 0; i < inimigos.size(); i++) {
 			Inimigo ind = inimigos.get(i);
-			ind.draw(g);
+			ind.draw(g);	
 		}
 		
 		// botao pause
@@ -142,6 +163,7 @@ public class GamePanel extends JPanel implements ActionListener {
 			for(int j = 0; j < ind.getAtaque().size(); j++) {
 				Ataque atk = ind.getAtaque().get(j);
 				atk.draw(g);
+				
 			}
 		}
 		
@@ -170,9 +192,11 @@ public class GamePanel extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
 		for(int i = 0; i < inimigos.size(); i++) {
 			Inimigo ind = inimigos.get(i);
 			if (ind.getWidth()+ind.getX() < 0) {
+				removePositionInd(ind.getY());
 				inimigos.remove(ind);
 			}else {
 				ind.move();
@@ -182,6 +206,12 @@ public class GamePanel extends JPanel implements ActionListener {
 		
 		if(e.getSource().equals(timerSpawn)) {
 			inimigos.add(new Inimigo(SCREEN_WIDTH-50, 240 + random.nextInt(4)*100));
+			addPositionInd(inimigos.get(inimigos.size()-1).getY());
+		}
+		if(e.getSource().equals(timerAttack)) {
+			for(int i = 0; i < aliados.size(); i++) {
+				aliados.get(i).addAtaque(positionIni);
+			}
 		}
 		
 		// Colission  teste
@@ -196,7 +226,13 @@ public class GamePanel extends JPanel implements ActionListener {
 				for(int k = 0; k < inimigos.size(); k++) {
 					Inimigo ini = inimigos.get(k);
 					if(ini.getX() <= atk.getX() && (ini.getY() <= atk.getY() && ini.getY()+ini.getHeight() >= atk.getY())) {
-						inimigos.remove(k);
+						int iniLife = ini.getLife() - 50;
+						if(iniLife > 0) {
+							ini.setLife(iniLife);
+						}else {
+							removePositionInd(ini.getY());
+							inimigos.remove(k);
+						}
 						ind.getAtaque().remove(j);
 						break;
 					}
@@ -276,11 +312,6 @@ public class GamePanel extends JPanel implements ActionListener {
 					new Home().setVisible(true);
 					fechar = true;
 				}
-			}
-			
-			
-			if (e.getX() > 1100 && e.getX() < 1120 && e.getY() > 10 && e.getY() < 30) {
-				reset();
 			}
 		}
 
