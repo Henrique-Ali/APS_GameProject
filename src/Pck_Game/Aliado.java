@@ -9,27 +9,29 @@ import javax.swing.Timer;
 public class Aliado extends Personagens implements ActionListener{
 	private Timer timer;
 	private ArrayList<Ataque> ataque = new ArrayList<Ataque>();
-	private boolean toContruct = false;
+	private boolean toConstruct = false;
 	
 	public Aliado(int x, int y) {
-		super(x, y, "img\\sPlayer.png");
+		super(x, y, 100, "img\\sPlayer.png");
 		timer = new Timer(2000,this);
 		timer.start();
 	}
 
-	public boolean isToContruct() {
-		return toContruct;
+	public boolean isToConstruct() {
+		return toConstruct;
 	}
 
-	public void setToContruct(boolean toContruct) {
-		this.toContruct = toContruct;
+	public void setToConstruct(boolean toConstruct) {
+		this.toConstruct = toConstruct;
 	}
 	
 	public void addAtaque(int[] positionInd) {
-		int y = (this.getY()-240)/100;
-		System.out.println("tiro "+y);
-		if (positionInd[y] > 0) {
-			ataque.add(new Ataque(this.getX()+this.getWidth(),this.getY()+this.getHeight()/2));
+		if(this.getY() > 240 && toConstruct == true) {
+			int y = (this.getY()-240)/100;
+			System.out.println("tiro " + y); 
+			if (positionInd[y] > 0) {
+				ataque.add(new Ataque(this.getX()+this.getWidth(),this.getY()+this.getHeight()/2));
+			}
 		}
 	}
 	@Override

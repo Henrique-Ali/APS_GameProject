@@ -21,7 +21,7 @@ public class GameFrame extends JFrame implements ActionListener{
 	
 		this.setResizable(false);
 		this.pack();
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setBackground(Color.black);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);

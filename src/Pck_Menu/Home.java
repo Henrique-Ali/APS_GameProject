@@ -32,7 +32,7 @@ public class Home extends JFrame {
 	private JPanel contentPane;
 
 	public Home() {
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //		setUndecorated(true);
 		setBounds(0, 0, 1280, 720);
 		setLocationRelativeTo(null);
