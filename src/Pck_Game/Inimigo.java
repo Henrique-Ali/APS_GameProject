@@ -1,9 +1,11 @@
 package Pck_Game;
 
+import java.awt.Graphics;
+
 public class Inimigo extends Personagens {
 
 	public Inimigo(int x, int y) {
-		super(x, y, "img\\sEnemy.png");
+		super(x, y, 100, "img\\sEnemy.png");
 	
 	}
 	

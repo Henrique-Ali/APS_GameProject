@@ -1,6 +1,7 @@
 package Pck_Game;
 
 
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,12 +11,16 @@ public class Ataque extends Personagens implements ActionListener{
 	private Timer timer;
 	
 	public Ataque(int x, int y) {
-		super(x, y, "img\\sBullet.png");
+		super(x, y, 999, "img\\sBullet.png");
 		
 		timer = new Timer(1, this);
 		timer.start();
 	}
-	
+	@Override
+	public void draw(Graphics g) {
+		g.drawImage(this.getImg(), this.getX(), this.getY(), null);
+		
+	}
 	public void actionPerformed(ActionEvent e) {	
 		setX(getX()+4);
 	}

@@ -29,17 +29,25 @@ import java.awt.event.MouseAdapter;
 public class GamePanel extends JPanel implements ActionListener {
 	private ArrayList<Inimigo> inimigos = new ArrayList<Inimigo>();
 	private ArrayList<Aliado> aliados = new ArrayList<Aliado>();
+	
 	private static final int SCREEN_WIDTH = 1280;
 	private static final int SCREEN_HEIGHT = 720;
+	
 	private int[][] matrizMapa = new int[4][7];
+	private int [] positionIni  = new int[4];
 	private int mX, mY;
+	private int attackDamage = 50;
+	
 	private boolean pausa = false;
 	private boolean fechar = false;
 	private boolean musica = true;
-	private Timer timer, timerSpawn;
+	
+	private Timer timer, timerSpawn, timerAttack;
 	private MyListeners mList = new MyListeners();
 	private Random random;
 
+	
+	// MÉTODO CONSTRUTOR
 	public GamePanel() {
 		this.setBackground(Color.black);
 		this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -50,40 +58,73 @@ public class GamePanel extends JPanel implements ActionListener {
 		
 		timer = new Timer(1, this);
 		timer.start();
-		timerSpawn = new Timer(1000, this);
+		timerSpawn = new Timer(3000, this);
 		timerSpawn.start();
 		
-		random = new Random();
+		/*
+		 * TESTE TIMER TIRO - PENDENTE
+		 */
+		timerAttack = new Timer(1000, this);
+		timerAttack.start();
 		
+		random = new Random();
 	}
+
+	////////////////////////////////////////////////////////
 	
+	// MÉTODO PAUSA
 	public void setPausa(boolean pausa) {
 		this.pausa = pausa;
 	}
-	
 	public boolean getPausa() {
 		return this.pausa;
 	}
 	
+	
+	// MÉTODO POSITION IND  -- PENDENTE --
+	public void addPositionInd(int y) {
+		int indY = (y-240)/100;
+		if(indY >= 0) {
+			positionIni[indY] += 1;
+				System.out.println("addposition"+indY+" "+positionIni[indY]+"  ");
+		}
+	}
+	public void removePositionInd(int y) {
+		int indY = (y-240)/100;
+		if(indY >= 0) {
+			positionIni[indY] -= 1;
+				System.out.println("removeposition"+indY+" "+positionIni[indY]+"  ");
+		}
+	}
+	
+	
+	// MÉTODO FECHAR
 	public boolean getFechar() {
 		return this.fechar;
 	}
 	
+	
+	// MÉTODO PAINT
 	public void paint(Graphics g) {
 		super.paint(g);
-//////////////////////////////////////////////////////////////////////////////////
+
 		
 		Graphics2D g2d = (Graphics2D) g;
 		
+		// "CÉU"
 		g.setColor(new Color(100, 200, 255));
 		g.fillRect(0, 0, SCREEN_WIDTH, 220);
 		
+		// "CAMPO ALIADOS"
 		g.setColor(new Color(50, 100, 50));
 		g.fillRect(0, 220, SCREEN_WIDTH-378, SCREEN_HEIGHT-220);
 		
+		// "CAMPO INIMIGOS"
 		g.setColor(new Color(40, 40, 50));
 		g.fillRect(SCREEN_WIDTH-380, 220, SCREEN_WIDTH - 900, SCREEN_HEIGHT-220);
+	
 		
+		// LINHAS
 		g2d.setStroke(new BasicStroke(4));
 		g2d.setColor(new Color(30, 30, 40));
 		
@@ -94,7 +135,7 @@ public class GamePanel extends JPanel implements ActionListener {
 		g.setColor(new Color(60, 120, 60));
 		for(int i = 0; i < aliados.size(); i++) {
 			Aliado ind = aliados.get(i);
-			if (ind.isToContruct() == false) {
+			if (ind.isToConstruct() == false) {
 				if(mX > 200 && mX < 900) {
 					if (mY > 240 && mY < SCREEN_HEIGHT-80) {
 					g.fillRect(200+(100*((mX-200)/100))-2, 240+(100*((mY-240)/100))+2, 100, 100);
@@ -102,35 +143,32 @@ public class GamePanel extends JPanel implements ActionListener {
 				}
 			}
 		}
-		
 		g2d.setColor(new Color(40, 90, 40));
-		//Linha Vertical
+		
+		// Linha Vertical
 		for(int i = 0; i < 8; i++) {
 			g2d.drawLine(200-2+(i*100), 240+2, 200-2+(i*100), SCREEN_HEIGHT-80);
 		}
 		
-		//Linha Horizontal
+		// Linha Horizontal
 		for(int i = 0; i < 5; i++) {
 			g2d.drawLine(200, 242+(100*i), 900-2, 242+(100*i));
 		}
 		
 //////////////////////////////////////////////////////////////////////////////////
 		
+		// DRAW - INIMIGOS
 		for(int i = 0; i < inimigos.size(); i++) {
 			Inimigo ind = inimigos.get(i);
-			ind.draw(g);
+			ind.draw(g);	
 		}
 		
-		// botao pause
-		if (pausa == false) {
-			g.drawImage(new ImageIcon("img\\sBtnAvancar.png").getImage(), SCREEN_WIDTH - 120, 20, this);
-		}
-		
-		g.setColor(new Color(176, 109, 76));
-		g.fillRect(0, 80, 150, SCREEN_HEIGHT - 160);
-		
-		g.drawImage(new ImageIcon("img\\sPlayer.png").getImage(), 25, 100, this);
-		
+		// "LOJA"
+				g.setColor(new Color(176, 109, 76));
+				g.fillRect(0, 80, 150, SCREEN_HEIGHT - 160);
+				g.drawImage(new ImageIcon("img\\sPlayer.png").getImage(), 25, 100, this);
+				
+		// DRAW - ALIADOS
 		for(int i = 0; i < aliados.size(); i++) {
 			Aliado ind = aliados.get(i);
 			ind.draw(g);
@@ -141,9 +179,17 @@ public class GamePanel extends JPanel implements ActionListener {
 			Aliado ind = aliados.get(i);
 			for(int j = 0; j < ind.getAtaque().size(); j++) {
 				Ataque atk = ind.getAtaque().get(j);
-				atk.draw(g);
+				atk.draw(g);	
 			}
 		}
+		
+		// botao pause
+		if (pausa == false) {
+			g.drawImage(new ImageIcon("img\\sBtnAvancar.png").getImage(), SCREEN_WIDTH - 120, 20, this);
+		}
+			
+		
+		
 		
 		if (pausa) {
 			g.drawImage(new ImageIcon("img\\backgroundPause.jpg").getImage(), 0, 0, this);
@@ -170,9 +216,11 @@ public class GamePanel extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
 		for(int i = 0; i < inimigos.size(); i++) {
 			Inimigo ind = inimigos.get(i);
 			if (ind.getWidth()+ind.getX() < 0) {
+				removePositionInd(ind.getY());
 				inimigos.remove(ind);
 			}else {
 				ind.move();
@@ -182,6 +230,12 @@ public class GamePanel extends JPanel implements ActionListener {
 		
 		if(e.getSource().equals(timerSpawn)) {
 			inimigos.add(new Inimigo(SCREEN_WIDTH-50, 240 + random.nextInt(4)*100));
+			addPositionInd(inimigos.get(inimigos.size()-1).getY());
+		}
+		if(e.getSource().equals(timerAttack)) {
+			for(int i = 0; i < aliados.size(); i++) {
+				aliados.get(i).addAtaque(positionIni);
+			}
 		}
 		
 		// Colission  teste
@@ -196,7 +250,13 @@ public class GamePanel extends JPanel implements ActionListener {
 				for(int k = 0; k < inimigos.size(); k++) {
 					Inimigo ini = inimigos.get(k);
 					if(ini.getX() <= atk.getX() && (ini.getY() <= atk.getY() && ini.getY()+ini.getHeight() >= atk.getY())) {
-						inimigos.remove(k);
+						int iniLife = (int)ini.getLife() - attackDamage;
+						if(iniLife > 0) {
+							ini.setLife(iniLife);
+						}else {
+							removePositionInd(ini.getY());
+							inimigos.remove(k);
+						}
 						ind.getAtaque().remove(j);
 						break;
 					}
@@ -277,11 +337,6 @@ public class GamePanel extends JPanel implements ActionListener {
 					fechar = true;
 				}
 			}
-			
-			
-			if (e.getX() > 1100 && e.getX() < 1120 && e.getY() > 10 && e.getY() < 30) {
-				reset();
-			}
 		}
 
 		
@@ -290,13 +345,13 @@ public class GamePanel extends JPanel implements ActionListener {
 		public void mouseReleased(MouseEvent e) {
 			for(int i = 0; i < aliados.size(); i++) {
 				Aliado ind = aliados.get(i);
-				if (ind.isToContruct() == false) {
+				if (ind.isToConstruct() == false) {
 					if(mX > 200 && mX < 900 && mY > 240 && mY < SCREEN_HEIGHT-80) {
 						if(matrizMapa[(mY-240)/100][(mX-200)/100] == 0) {
 							matrizMapa[(mY-240)/100][(mX-200)/100] = 1;
 							ind.setX(200+(100*((mX-200)/100))-2);
 							ind.setY(240+(100*((mY-240)/100))+2);
-							ind.setToContruct(true);
+							ind.setToConstruct(true);
 						}else {
 							aliados.remove(i);
 						}
@@ -326,7 +381,7 @@ public class GamePanel extends JPanel implements ActionListener {
 			mY = e.getY();
 			for(int i = 0; i < aliados.size(); i++) {
 				Aliado ind = aliados.get(i);
-				if (ind.isToContruct() == false) {
+				if (ind.isToConstruct() == false) {
 					ind.setX(e.getX()-50);
 					ind.setY(e.getY()-50);
 				}
