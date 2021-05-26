@@ -25,10 +25,16 @@ public class AudioPlayer {
     }
     
     public void play() {
-    	if(clip ==null) return;
+    	if(clip == null) return;
     	stop();
     	clip.setFramePosition(0);
     	clip.start();
+    }
+    public void loop() {
+    	if(clip == null) return;
+    	stop();
+    	clip.setFramePosition(0);
+    	clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
 	public void stop() {

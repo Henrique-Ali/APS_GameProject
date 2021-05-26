@@ -17,13 +17,14 @@ public class Inimigo extends Personagens implements ActionListener{
 	private ArrayList<Aliado> aliados = new ArrayList<Aliado>();
 	private Aliado toAttack;
 	private int[][] matrizMapa = new int[4][7];
+	private boolean lentidao = false;
 	
 	
-	public Inimigo(int x, int y, String nomeInimigo) {
-		super(x, y, 100, "Inimigos", nomeInimigo);
+	public Inimigo(int x, int y, int vida, String nomeInimigo) {
+		super(x, y, vida, "Inimigos", nomeInimigo);
 		
 		timerUpdate = new Timer(200, this);
-		timerAtack = new Timer(2000, this);
+		timerAtack = new Timer(1000, this);
 		
 	}
 	
@@ -34,13 +35,17 @@ public class Inimigo extends Personagens implements ActionListener{
 //		}
 		super.draw(g);
 		if (atackAni) {
-			g.drawImage(new ImageIcon("img\\sGarra.png").getImage(), getX()-30, getY()+getHeight()/2-30, null);
+			g.drawImage(new ImageIcon("img\\inimigos\\sCorte.png").getImage(), getX()-40, getY()+getHeight()/2-40, null);
 		}
 	}
 	
 	public void move() {
 		if (state == 0) {
-			setX(getX()-2);
+			if(lentidao == false) {
+				setX(getX()-2);
+			}else {
+				setX(getX()-1);
+			}
 		}
 	}
 
@@ -70,11 +75,9 @@ public class Inimigo extends Personagens implements ActionListener{
 	public void setState(int state, Aliado Atack) {
 		if(Atack != this.toAttack) {
 			if(state == 1 && this.state == 0) {
-				System.out.println("AAAAA");
 				this.state = state;
 				timerAtack.start();
 			}else if(state == 0 && this.state == 1) {
-				System.out.println("BBBB");
 				this.state = state;
 				timerAtack.stop();
 			}
@@ -100,5 +103,9 @@ public class Inimigo extends Personagens implements ActionListener{
 
 	public void setMatrizMapa(int[][] matrizMapa) {
 		this.matrizMapa = matrizMapa;
+	}
+
+	public void setLentidao(boolean lentidao) {
+		this.lentidao = lentidao;
 	}
 }

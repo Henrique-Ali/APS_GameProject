@@ -13,6 +13,7 @@ import javax.swing.Timer;
 public class GameFrame extends JFrame implements ActionListener{
 	private GamePanel gamePanel = new GamePanel();
 	private Timer timer;
+
 	
 	public GameFrame() {	
 		// Tela do jogo

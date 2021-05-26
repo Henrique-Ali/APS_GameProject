@@ -3,6 +3,7 @@ package Pck_Game;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -36,15 +37,18 @@ public class GamePanel extends JPanel implements ActionListener {
 	private int[][] matrizMapa = new int[4][7];
 	private int[] positionIni  = new int[4];
 	private int mX, mY;
-	private int attackDamage = 50;
+	private int money = 500;
+	private int attackDamage;
+	private int tempo;
 	
 	private boolean pausa = false;
 	private boolean fechar = false;
 	private boolean musica = true;
 	
-	private Timer timer, timerSpawn, timerAttack;
+	private Timer timer, timerSpawn1, timerSpawn2, timerSpawn3, timerAttack;
 	private MyListeners mList = new MyListeners();
 	private Random random;
+	private AudioPlayer mClick, mMusic;
 
 
 	// MÉTODO CONSTRUTOR
@@ -58,20 +62,20 @@ public class GamePanel extends JPanel implements ActionListener {
 		
 		timer = new Timer(1, this);
 		timer.start();
-		timerSpawn = new Timer(3000, this);
-		timerSpawn.start();
 		
-		/*
-		 * TESTE TIMER TIRO - PENDENTE
-		 */
+		timerSpawn1 = new Timer(6000, this);
+		timerSpawn1.start();
+		
+		timerSpawn2 = new Timer(5000, this);
+		timerSpawn3 = new Timer(7000, this);
+		
 		timerAttack = new Timer(1000, this);
 		timerAttack.start();
 		
 		random = new Random();
-		
-		inimigos.add(new Inimigo(SCREEN_WIDTH-50, 280 + 1/*random.nextInt(1)*/*100, "sInimigo1"));
-		addPositionInd(inimigos.get(inimigos.size()-1).getY());
-		
+	
+		mMusic = new AudioPlayer("/Sounds/soundMusic.wav");
+		mMusic.loop();
 	}
 
 	////////////////////////////////////////////////////////
@@ -87,21 +91,21 @@ public class GamePanel extends JPanel implements ActionListener {
 	
 	// MÉTODO POSITION IND  -- PENDENTE --
 	public void addPositionInd(int y) {
-		int indY = (y-280)/100;
+		int indY = (y-250)/100;
 		if(indY >= 0) {
 			positionIni[indY] += 1;
-				//System.out.println("addposition"+indY+" "+positionIni[indY]+"  ");
+				System.out.println("addposition"+indY+" "+positionIni[indY]+"  ");
 		}
 	}
 	public void removePositionInd(int y) {
-		int indY = (y-280)/100;
+		int indY = (y-250)/100;
 		if(indY >= 0) {
 			positionIni[indY] -= 1;
 				//System.out.println("removeposition"+indY+" "+positionIni[indY]+"  ");
 		}
 	}
 	public int getPositionInd(int y) {
-		int indY = (y-280)/100;
+		int indY = (y-250)/100;
 		System.out.println(indY);
 		if(indY > 0) {
 			return indY;
@@ -129,13 +133,8 @@ public class GamePanel extends JPanel implements ActionListener {
 		
 		// LINHAS
 		g2d.setStroke(new BasicStroke(4));
-		g2d.setColor(new Color(30, 30, 40));
 		
-		for(int i = 0; i < 5; i++) {
-			g2d.drawLine(SCREEN_WIDTH-280, 282+(100*i), SCREEN_WIDTH, 282+(100*i));
-		}
-		
-		g.setColor(new Color(60, 120, 60));
+		g.setColor(new Color(180, 70, 35));
 		for(int i = 0; i < aliados.size(); i++) {
 			Aliado ind = aliados.get(i);
 			if (ind.isToConstruct() == false) {
@@ -146,8 +145,7 @@ public class GamePanel extends JPanel implements ActionListener {
 				}
 			}
 		}
-		g2d.setColor(new Color(40, 90, 40));
-		
+		g2d.setColor(new Color(70, 20, 5));
 		// Linha Vertical
 		for(int i = 0; i < 8; i++) {
 			g2d.drawLine(300-2+(i*100), 280+2, 300-2+(i*100), SCREEN_HEIGHT-40);
@@ -156,6 +154,7 @@ public class GamePanel extends JPanel implements ActionListener {
 		// Linha Horizontal
 		for(int i = 0; i < 5; i++) {
 			g2d.drawLine(300, 282+(100*i), 1000-2, 282+(100*i));
+			g2d.drawLine(SCREEN_WIDTH-280, 282+(100*i), SCREEN_WIDTH, 282+(100*i));
 		}
 		
 //////////////////////////////////////////////////////////////////////////////////
@@ -163,13 +162,34 @@ public class GamePanel extends JPanel implements ActionListener {
 		
 		
 		// "LOJA"
-				g.setColor(new Color(176, 109, 76));
-				g.fillRect(0, 80, 150, SCREEN_HEIGHT - 160);
-				g.drawImage(new ImageIcon("img\\Aliados\\sALiadoFlor.png").getImage(),   25, 100, this);
-				g.drawImage(new ImageIcon("img\\Aliados\\sALiadoCobra.png").getImage(),  25, 200, this);
-				g.drawImage(new ImageIcon("img\\Aliados\\sALiadoAranha.png").getImage(), 25, 300, this);
-				g.drawImage(new ImageIcon("img\\Aliados\\sALiadoTucano.png").getImage(), 25, 400, this);
-				g.drawImage(new ImageIcon("img\\Aliados\\sALiadoCacto.png").getImage(),  25, 500, this);
+		g2d.setColor(new Color(70, 20, 5));
+		for(int i = 0; i < 6; i++) {
+			g2d.drawLine(2, SCREEN_HEIGHT-20-(90*i), 200, SCREEN_HEIGHT-20-(90*i));
+		}
+		g2d.drawLine(2, SCREEN_HEIGHT-470, 2, SCREEN_HEIGHT-20);
+		g2d.drawLine(200, SCREEN_HEIGHT-470, 200, SCREEN_HEIGHT-20);
+		
+		g.drawImage(new ImageIcon("img\\Aliados\\sALiadoFlor.png").getImage(),   10, SCREEN_HEIGHT-490, this);
+		g.drawImage(new ImageIcon("img\\Aliados\\sALiadoCobra.png").getImage(),  10, SCREEN_HEIGHT-400, this);
+		g.drawImage(new ImageIcon("img\\Aliados\\sALiadoAranha.png").getImage(), 10, SCREEN_HEIGHT-310, this);
+		g.drawImage(new ImageIcon("img\\Aliados\\sALiadoTucano.png").getImage(), 10, SCREEN_HEIGHT-220, this);
+		g.drawImage(new ImageIcon("img\\Aliados\\sALiadoCacto.png").getImage(),  10, SCREEN_HEIGHT-130, this);
+		
+		g.drawImage(new ImageIcon("img\\Sprites\\sHudMoedas.png").getImage(), 20, 10, this);
+		g2d.setColor(Color.black);
+		g2d.setFont(new Font("Monospaced", Font.BOLD, 50));
+		g2d.drawString("" + money, 110, 70);
+		g2d.drawString("" + tempo, 300, 70);
+		g2d.setFont(new Font("Sans", Font.BOLD, 26));
+		for(int i = 0; i < 5; i++) {
+			g2d.drawString("Custo", 110, SCREEN_HEIGHT-65-(90*i));
+		}
+
+		g2d.drawString("100", 130, SCREEN_HEIGHT-405);
+		g2d.drawString("150", 130, SCREEN_HEIGHT-315);
+		g2d.drawString("200", 130, SCREEN_HEIGHT-225);
+		g2d.drawString("300", 130, SCREEN_HEIGHT-135);
+		g2d.drawString("300", 130, SCREEN_HEIGHT-45);
 				
 		// DRAW - ALIADOS
 		for(int i = 0; i < aliados.size(); i++) {
@@ -191,11 +211,7 @@ public class GamePanel extends JPanel implements ActionListener {
 				atk.draw(g);	
 			}
 		}
-		
-		// Painel de Moedas
-			g.drawImage(new ImageIcon("img\\Sprites\\sHudMoedas.png").getImage(), 20, 10, this);
-			
-		
+
 		// botao pause
 		if (pausa == false) {
 			g.drawImage(new ImageIcon("img\\Sprites\\sBtnPausa.png").getImage(), SCREEN_WIDTH - 120, 20, this);
@@ -215,14 +231,6 @@ public class GamePanel extends JPanel implements ActionListener {
 				g.drawImage(new ImageIcon("img\\Sprites\\sBtnSomOff.png").getImage(), SCREEN_WIDTH/3 - 96, SCREEN_HEIGHT/2 - 36, this);
 			}
 		}
-		
-		//g.drawImage(new ImageIcon("img\\sAliado1.png").getImage(), 300, 280, this);
-		//g.drawImage(new ImageIcon("img\\sAliado2.png").getImage(), 400, 380, this);
-		//g.drawImage(new ImageIcon("img\\sAliado3.png").getImage(), 500, 480, this);
-		
-		//g.drawImage(new ImageIcon("img\\sInimigo1.png").getImage(), 1000, 280, this);
-		//g.drawImage(new ImageIcon("img\\sInimigo2.png").getImage(), 1000, 380, this);
-		//g.drawImage(new ImageIcon("img\\sInimigo3.png").getImage(), 1000, 480, this);
 	}
 	
 	
@@ -230,6 +238,7 @@ public class GamePanel extends JPanel implements ActionListener {
 		inimigos = new ArrayList<Inimigo>();
 		aliados = new ArrayList<Aliado>();
 		matrizMapa = new int[4][7];
+		tempo = 0;
 	}
 
 	@Override
@@ -250,10 +259,7 @@ public class GamePanel extends JPanel implements ActionListener {
 			ini.setAliados(aliados);
 			for(int k = 0; k < aliados.size(); k++) {
 				Aliado ali = aliados.get(k);
-				if (ini.getX() < ali.getX()+ali.getWidth() && ini.getX()+ini.getWidth() > ali.getX()+ali.getWidth()/2 && ini.getY()+5 > ali.getY() && ini.getY()+ini.getHeight() < ali.getY()+ali.getHeight()) {
-					System.out.println(ini.getX() < ali.getX()+ali.getWidth() && ini.getX()+ini.getWidth() > ali.getX()+ali.getWidth()/2 && ini.getY()+5 > ali.getY() && ini.getY()+ini.getHeight() < ali.getY()+ali.getHeight());
-					System.out.println(aliados);
-					System.out.println(ali + "\n");
+				if (ini.getX() < ali.getX()+ali.getWidth() && ini.getX()+ini.getWidth() > ali.getX()+ali.getWidth()/2 && ini.getY()+25 < ali.getY() && ali.getY()+ali.getHeight() < ini.getY()+ini.getHeight()+10) {
 					if (ali.isToConstruct()) {
 						if(ini.getToAttack() != ali) {
 							ini.setState(1, ali);
@@ -261,23 +267,58 @@ public class GamePanel extends JPanel implements ActionListener {
 							break;
 						}
 					}
-				}else {
-					ini.setState(0, ali);
-					ini.setToAttack(null);
 				}
 			}
 		}
 		
 		
-		if(e.getSource().equals(timerSpawn)) {
-			inimigos.add(new Inimigo(SCREEN_WIDTH-50, 280 + 1/*random.nextInt(1)*/*100, "sInimigo1"));
+		if(tempo == 100 && timerSpawn2.isRunning() == false) {
+			timerSpawn2.start();
+			if(timerSpawn1.getInitialDelay() == 3000) {
+				timerSpawn1 = new Timer(3000, this);
+				timerSpawn1.start();
+			}
+		}
+		
+		if(tempo == 170 && timerSpawn3.isRunning() == false) {
+			timerSpawn3.start();
+			if(timerSpawn1.getInitialDelay() == 3000) {
+				timerSpawn1 = new Timer(2000, this);
+				timerSpawn1.start();
+			}
+		}
+		
+		if(tempo == 250 && timerSpawn1.getInitialDelay() == 2000) {
+			timerSpawn1 = new Timer(1000, this);
+			timerSpawn1.start();
+			timerSpawn2 = new Timer(2000, this);
+			timerSpawn2.start();
+			timerSpawn3 = new Timer(4000, this);
+			timerSpawn3.start();
+		}
+		
+		if(e.getSource().equals(timerSpawn1)) {
+			inimigos.add(new Inimigo(SCREEN_WIDTH-50, 250 + random.nextInt(4)*100, 100, "sInimigo1"));
 			addPositionInd(inimigos.get(inimigos.size()-1).getY());
 		}
 		
+		if(e.getSource().equals(timerSpawn2)) {
+			inimigos.add(new Inimigo(SCREEN_WIDTH-50, 250 + random.nextInt(4)*100, 200, "sInimigo2"));
+			addPositionInd(inimigos.get(inimigos.size()-1).getY());
+		}
+		
+		if(e.getSource().equals(timerSpawn3)) {
+			inimigos.add(new Inimigo(SCREEN_WIDTH-50, 250 + random.nextInt(4)*100, 300, "sInimigo3"));
+			addPositionInd(inimigos.get(inimigos.size()-1).getY());
+		}
 		if(e.getSource().equals(timerAttack)) {
+			tempo++;
 			for(int i = 0; i < aliados.size(); i++) {
 				if(aliados.get(i).getToAtaca()) {
 					aliados.get(i).addAtaque(positionIni, aliados.get(i).getTipoAliado());
+				}
+				if(aliados.get(i).getTipoAliado() == "Flor" && aliados.get(i).isToConstruct()) {
+					money += 10;
 				}
 			}
 		}
@@ -287,14 +328,29 @@ public class GamePanel extends JPanel implements ActionListener {
 			Aliado ind = aliados.get(i);
 			for(int j = 0; j < ind.getAtaque().size(); j++) {
 				Ataque atk = ind.getAtaque().get(j);
-				
 				atk.setPausa(pausa);
-				
 				for(int k = 0; k < inimigos.size(); k++) {
 					Inimigo ini = inimigos.get(k);
 					if(ini.getX() <= atk.getX() && (ini.getY() <= atk.getY() && ini.getY()+ini.getHeight() >= atk.getY())) {
+						switch (ind.getTipoAliado()) {
+						case "Cobra":
+							attackDamage = 50;
+							break;
+						case "Aranha":
+							attackDamage = 50;
+							break;
+						case "Tucano":
+							attackDamage = 100;
+							break;
+							
+						default:
+							break;
+						}
 						int iniLife = (int)ini.getLife() - attackDamage;
 						if(iniLife > 0) {
+							if(ind.getTipoAliado() == "Aranha") {
+								ini.setLentidao(true);
+							}
 							ini.setLife(iniLife);
 						}else {
 							removePositionInd(ini.getY());
@@ -321,44 +377,59 @@ public class GamePanel extends JPanel implements ActionListener {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			if (e.getX() > 25 && e.getX() < 125) {
-				if(e.getY() > 100 && e.getY() < 200) {
-					aliados.add(new Aliado(e.getX()-50, e.getY()-50, "Flor", false));
-					for(int i = 0; i < inimigos.size(); i++) {
-						Inimigo ini = inimigos.get(i);
-						ini.setAliados(aliados);
+			if (e.getX() > 2 && e.getX() < 200) {
+				if(e.getY() > SCREEN_HEIGHT-470 && e.getY() < SCREEN_HEIGHT-380) {
+					if(money >= 100) {
+						aliados.add(new Aliado(e.getX()-50, e.getY()-50, 100, "Flor", false));
+						for(int i = 0; i < inimigos.size(); i++) {
+							Inimigo ini = inimigos.get(i);
+							ini.setAliados(aliados);
+						}
+						money -= 100;
 					}
 				}
 				
-				if(e.getY() > 200 && e.getY() < 300) {
-					aliados.add(new Aliado(e.getX()-50, e.getY()-50, "Cobra", true));
-					for(int i = 0; i < inimigos.size(); i++) {
-						Inimigo ini = inimigos.get(i);
-						ini.setAliados(aliados);
+				if(e.getY() > SCREEN_HEIGHT-380 && e.getY() < SCREEN_HEIGHT-290) {
+					if(money >= 150) {
+						aliados.add(new Aliado(e.getX()-50, e.getY()-50, 150, "Cobra", true));
+						for(int i = 0; i < inimigos.size(); i++) {
+							Inimigo ini = inimigos.get(i);
+							ini.setAliados(aliados);
+						}
+						money -= 150;
 					}
 				}
 				
-				if(e.getY() > 300 && e.getY() < 400) {
-					aliados.add(new Aliado(e.getX()-50, e.getY()-50, "Aranha", true));
-					for(int i = 0; i < inimigos.size(); i++) {
-						Inimigo ini = inimigos.get(i);
-						ini.setAliados(aliados);
+				if(e.getY() > SCREEN_HEIGHT-290 && e.getY() < SCREEN_HEIGHT-200) {
+					if(money >= 200) {
+						aliados.add(new Aliado(e.getX()-50, e.getY()-50, 150, "Aranha", true));
+						for(int i = 0; i < inimigos.size(); i++) {
+							Inimigo ini = inimigos.get(i);
+							ini.setAliados(aliados);
+						}
+						money -= 200;
 					}
 				}
 				
-				if(e.getY() > 400 && e.getY() < 500) {
-					aliados.add(new Aliado(e.getX()-50, e.getY()-50, "Tucano", true));
-					for(int i = 0; i < inimigos.size(); i++) {
-						Inimigo ini = inimigos.get(i);
-						ini.setAliados(aliados);
+				if(e.getY() > SCREEN_HEIGHT-200 && e.getY() < SCREEN_HEIGHT-110) {
+					if(money >= 300) {
+						aliados.add(new Aliado(e.getX()-50, e.getY()-50, 150, "Tucano", true));
+						for(int i = 0; i < inimigos.size(); i++) {
+							Inimigo ini = inimigos.get(i);
+							ini.setAliados(aliados);
+						}
+						money -= 300;
 					}
 				}
 				
-				if(e.getY() > 500 && e.getY() < 600) {
-					aliados.add(new Aliado(e.getX()-50, e.getY()-50, "Cacto", false));
-					for(int i = 0; i < inimigos.size(); i++) {
-						Inimigo ini = inimigos.get(i);
-						ini.setAliados(aliados);
+				if(e.getY() > SCREEN_HEIGHT-110 && e.getY() < SCREEN_HEIGHT-20) {
+					if(money >= 300) {
+						aliados.add(new Aliado(e.getX()-50, e.getY()-50, 300, "Cacto", false));
+						for(int i = 0; i < inimigos.size(); i++) {
+							Inimigo ini = inimigos.get(i);
+							ini.setAliados(aliados);
+						}
+						money -= 300;
 					}
 				}
 			}
@@ -367,7 +438,9 @@ public class GamePanel extends JPanel implements ActionListener {
 			if (e.getX() > SCREEN_WIDTH - 120 && e.getX() < SCREEN_WIDTH - 40 && e.getY() > 20 && e.getY() < 100) {
 				if (pausa == false) {
 					timer.stop();
-					timerSpawn.stop();
+					timerSpawn1.stop();
+					timerSpawn2.stop();
+					timerSpawn3.stop();
 					pausa = true;
 					for(int i = 0; i < aliados.size(); i++) {
 						Aliado ind = aliados.get(i);
@@ -376,10 +449,24 @@ public class GamePanel extends JPanel implements ActionListener {
 							atk.setPausa(pausa);
 						}
 					}	
+					if(musica == true) {
+						mClick = new AudioPlayer("/Sounds/soundClick1.wav");
+						mClick.play();
+					}
 					repaint();
 				}else if(pausa == true) {
+					if(musica == true) {
+						mClick = new AudioPlayer("/Sounds/soundClick1.wav");
+						mClick.play();
+					}
 					timer.start();
-					timerSpawn.start();
+					timerSpawn1.start();
+					if(tempo == 100) {
+						timerSpawn2.start();
+					}
+					if(tempo == 200) {
+						timerSpawn3.start();
+					}
 					pausa = false;
 					for(int i = 0; i < aliados.size(); i++) {
 						Aliado ind = aliados.get(i);
@@ -392,8 +479,12 @@ public class GamePanel extends JPanel implements ActionListener {
 			// Botão Reset	
 			}else if (e.getX() > SCREEN_WIDTH/2 + 96 && e.getX() < SCREEN_WIDTH/2 + 268 && e.getY() > SCREEN_HEIGHT/2 - 36 && e.getY() < SCREEN_HEIGHT/2 + 36) {
 				if(pausa == true) {
+					if(musica == true) {
+						mClick = new AudioPlayer("/Sounds/soundClick1.wav");
+						mClick.play();
+					}
 					timer.start();
-					timerSpawn.start();
+					timerSpawn1.start();
 					pausa = false;
 					reset();
 				}
@@ -401,16 +492,24 @@ public class GamePanel extends JPanel implements ActionListener {
 			}else if (e.getX() > SCREEN_WIDTH/3 - 96 && e.getX() < SCREEN_WIDTH/3 + 72 && e.getY() > SCREEN_HEIGHT/2 - 36 && e.getY() < SCREEN_HEIGHT/2 + 36) {
 				if(pausa == true) {
 					if(musica) {
+						mClick = new AudioPlayer("/Sounds/soundClick1.wav");
+						mClick.play();
 						musica = false;
-						
+						mMusic.stop();
 					}else {
 						musica = true;
+						mMusic = new AudioPlayer("/Sounds/soundMusic.wav");
+						mMusic.loop();
 					}
 				}
 				repaint();
 			// Botão Home
 			}else if (e.getX() > SCREEN_WIDTH/2 - 96 && e.getX() < SCREEN_WIDTH/2 + 102 && e.getY() > SCREEN_HEIGHT/2 + 72 && e.getY() < SCREEN_HEIGHT/2 + 144) {
 				if(pausa == true) {
+					if(musica == true) {
+						mClick = new AudioPlayer("/Sounds/soundClick1.wav");
+						mClick.play();
+					}
 					new Home().setVisible(true);
 					fechar = true;
 				}
@@ -438,6 +537,25 @@ public class GamePanel extends JPanel implements ActionListener {
 							aliados.remove(i);
 						}
 					}else {
+						switch (aliados.get(i).getTipoAliado()) {
+						case "Flor":
+							money += 100;
+							break;
+						case "Cobra":
+							money += 150;
+							break;
+						case "Aranha":
+							money += 200;
+							break;
+						case "Tucano":
+							money += 300;
+							break;
+						case "Cacto":
+							money += 300;
+							break;
+						default:
+							break;
+						}
 						aliados.remove(i);
 					}
 				}

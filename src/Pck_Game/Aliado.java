@@ -15,8 +15,8 @@ public class Aliado extends Personagens{
 	private boolean toAtaca;
 	private String tipoAliado;
 	
-	public Aliado(int x, int y, String nomeAliado, boolean b) {
-		super(x, y, 100, "Aliados", "sAliado"+nomeAliado);	
+	public Aliado(int x, int y, int vida, String nomeAliado, boolean b) {
+		super(x, y, vida, "Aliados", "sAliado"+nomeAliado);	
 		tipoAliado = nomeAliado;
 		toAtaca = b;
 	}
@@ -30,6 +30,7 @@ public class Aliado extends Personagens{
 	}
 	
 	public void addAtaque(int[] positionInd, String aliado) {
+		
 		if(this.getY() > 280 && toConstruct == true) {
 			int y = (this.getY()-280)/100;
 			if (positionInd[y] > 0) {

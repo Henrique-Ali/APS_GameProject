@@ -1,4 +1,5 @@
 package Pck_Menu;
+import Pck_Game.AudioPlayer;
 import  Pck_Game.GameFrame;
 
 import javax.swing.JFrame;
@@ -13,6 +14,8 @@ import java.awt.event.MouseEvent;
 public class Home extends JFrame {
 
 	private JPanel contentPane;
+	private AudioPlayer mClick;
+	
 
 	public Home() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -47,6 +50,8 @@ public class Home extends JFrame {
         btnComecar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				mClick = new AudioPlayer("/Sounds/soundClick.wav");
+				mClick.play();
 				new GameFrame().setVisible(true);
 				dispose();
 			}
@@ -56,6 +61,8 @@ public class Home extends JFrame {
         btnSobre.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				mClick = new AudioPlayer("/Sounds/soundClick.wav");
+				mClick.play();
 				new Sobre().setVisible(true);
 				dispose();
 			}

@@ -9,10 +9,13 @@ import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import Pck_Game.AudioPlayer;
+
 public class Sobre extends JFrame {
 
 	private JPanel contentPane;
 	static int sum = 0;
+	private AudioPlayer mClick;
 
 
 	public Sobre() {
@@ -21,7 +24,7 @@ public class Sobre extends JFrame {
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setResizable(false);
-	        getContentPane().setLayout(null);
+	    getContentPane().setLayout(null);
 	        
 				        JLabel btnVoltar = new JLabel("");
 				        btnVoltar.setBounds(468, 563, 80, 80);
@@ -52,6 +55,8 @@ public class Sobre extends JFrame {
 	        	        btnCancelar.addMouseListener(new MouseAdapter() {
 				        	@Override
 				        	public void mouseClicked(MouseEvent e) {
+				        		mClick = new AudioPlayer("/Sounds/soundClick.wav");
+				        		mClick.play();
 				        		new Home().setVisible(true);
 				        		dispose();
 				        		
@@ -61,6 +66,8 @@ public class Sobre extends JFrame {
 	        	        btnAvancar.addMouseListener(new MouseAdapter() {
 				        	@Override
 				        	public void mouseClicked(MouseEvent e) {
+				        		mClick = new AudioPlayer("/Sounds/soundClick.wav");
+				        		mClick.play();
 				        		background.setIcon(new ImageIcon(mudarTela(1)));
 				        	}
 				        });
@@ -68,6 +75,8 @@ public class Sobre extends JFrame {
 	        	        btnVoltar.addMouseListener(new MouseAdapter() {
 				        	@Override
 				        	public void mouseClicked(MouseEvent e) {
+				        		mClick = new AudioPlayer("/Sounds/soundClick.wav");
+				        		mClick.play();
 				        		background.setIcon(new ImageIcon(mudarTela(-1)));
 				        	}
 				        });
