@@ -28,7 +28,9 @@ public abstract class Personagens {
 	public void draw(Graphics g) {
 		g.drawImage(img, x, y, null);
 		g.setColor(Color.black);
-		g.fillRect(this.getX(), this.getY() - 15, (int)((life / maxLife)*100), 15);
+		g.fillRect(this.getX(), this.getY() - 15, 100, 15);
+		g.setColor(Color.green);
+		g.fillRect(this.getX()+1, this.getY() - 14, (int)((life / maxLife)*98), 13);
 	}
 
 	public int getX() {

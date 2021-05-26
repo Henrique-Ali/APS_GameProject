@@ -6,15 +6,14 @@ import java.util.ArrayList;
 
 import javax.swing.Timer;
 
-public class Aliado extends Personagens implements ActionListener{
+public class Aliado extends Personagens{
 	private Timer timer;
 	private ArrayList<Ataque> ataque = new ArrayList<Ataque>();
 	private boolean toConstruct = false;
 	
 	public Aliado(int x, int y) {
 		super(x, y, 100, "img\\sPlayer.png");
-		timer = new Timer(2000,this);
-		timer.start();
+		
 	}
 
 	public boolean isToConstruct() {
@@ -26,21 +25,14 @@ public class Aliado extends Personagens implements ActionListener{
 	}
 	
 	public void addAtaque(int[] positionInd) {
-		if(this.getY() > 240 && toConstruct == true) {
-			int y = (this.getY()-240)/100;
-			System.out.println("tiro " + y); 
+		if(this.getY() > 280 && toConstruct == true) {
+			int y = (this.getY()-280)/100;
 			if (positionInd[y] > 0) {
 				ataque.add(new Ataque(this.getX()+this.getWidth(),this.getY()+this.getHeight()/2));
 			}
 		}
 	}
-	@Override
-	public void actionPerformed(ActionEvent e) {
-//		if (toContruct) {
-//			ataque.add(new Ataque(this.getX()+this.getWidth(),this.getY()+this.getHeight()/2));
-//		}
-	
-	}
+
 
 	public ArrayList<Ataque> getAtaque() {
 		return ataque;
@@ -48,14 +40,6 @@ public class Aliado extends Personagens implements ActionListener{
 
 	public void setAtaque(ArrayList<Ataque> ataque) {
 		this.ataque = ataque;
-	}
-	
-	public void setPausa(boolean pausa) {
-		if (pausa == false) {
-			timer.start();
-		} else {
-			timer.stop();
-		}
 	}
 	
 }
