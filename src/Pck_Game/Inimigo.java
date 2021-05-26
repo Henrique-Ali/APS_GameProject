@@ -1,6 +1,5 @@
 package Pck_Game;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,8 +19,8 @@ public class Inimigo extends Personagens implements ActionListener{
 	private int[][] matrizMapa = new int[4][7];
 	
 	
-	public Inimigo(int x, int y) {
-		super(x, y, 100, "img\\sEnemy.png");
+	public Inimigo(int x, int y, String nomeInimigo) {
+		super(x, y, 100, "Inimigos", nomeInimigo);
 		
 		timerUpdate = new Timer(200, this);
 		timerAtack = new Timer(2000, this);

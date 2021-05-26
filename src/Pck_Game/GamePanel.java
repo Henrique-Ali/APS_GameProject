@@ -46,7 +46,7 @@ public class GamePanel extends JPanel implements ActionListener {
 	private MyListeners mList = new MyListeners();
 	private Random random;
 
-	
+
 	// MÉTODO CONSTRUTOR
 	public GamePanel() {
 		this.setBackground(Color.black);
@@ -69,8 +69,9 @@ public class GamePanel extends JPanel implements ActionListener {
 		
 		random = new Random();
 		
-		inimigos.add(new Inimigo(SCREEN_WIDTH-50, 280 + 1/*random.nextInt(1)*/*100));
+		inimigos.add(new Inimigo(SCREEN_WIDTH-50, 280 + 1/*random.nextInt(1)*/*100, "sInimigo1"));
 		addPositionInd(inimigos.get(inimigos.size()-1).getY());
+		
 	}
 
 	////////////////////////////////////////////////////////
@@ -99,6 +100,15 @@ public class GamePanel extends JPanel implements ActionListener {
 				//System.out.println("removeposition"+indY+" "+positionIni[indY]+"  ");
 		}
 	}
+	public int getPositionInd(int y) {
+		int indY = (y-280)/100;
+		System.out.println(indY);
+		if(indY > 0) {
+			return indY;
+		}
+		return 0;
+		
+	}
 	
 	
 	// MÉTODO FECHAR
@@ -114,7 +124,7 @@ public class GamePanel extends JPanel implements ActionListener {
 		
 		Graphics2D g2d = (Graphics2D) g;
 		
-		g.drawImage(new ImageIcon("img\\sGameBackground.jpeg").getImage(), 0, 0, this);
+		g.drawImage(new ImageIcon("img\\Backgrounds\\backgroundGame.jpeg").getImage(), 0, 0, this);
 	
 		
 		// LINHAS
@@ -155,7 +165,11 @@ public class GamePanel extends JPanel implements ActionListener {
 		// "LOJA"
 				g.setColor(new Color(176, 109, 76));
 				g.fillRect(0, 80, 150, SCREEN_HEIGHT - 160);
-				g.drawImage(new ImageIcon("img\\sPlayer.png").getImage(), 25, 100, this);
+				g.drawImage(new ImageIcon("img\\Aliados\\sALiadoFlor.png").getImage(),   25, 100, this);
+				g.drawImage(new ImageIcon("img\\Aliados\\sALiadoCobra.png").getImage(),  25, 200, this);
+				g.drawImage(new ImageIcon("img\\Aliados\\sALiadoAranha.png").getImage(), 25, 300, this);
+				g.drawImage(new ImageIcon("img\\Aliados\\sALiadoTucano.png").getImage(), 25, 400, this);
+				g.drawImage(new ImageIcon("img\\Aliados\\sALiadoCacto.png").getImage(),  25, 500, this);
 				
 		// DRAW - ALIADOS
 		for(int i = 0; i < aliados.size(); i++) {
@@ -164,10 +178,10 @@ public class GamePanel extends JPanel implements ActionListener {
 		}
 		
 		// DRAW - INIMIGOS
-				for(int i = 0; i < inimigos.size(); i++) {
-					Inimigo ind = inimigos.get(i);
-					ind.draw(g);	
-				}
+		for(int i = 0; i < inimigos.size(); i++) {
+			Inimigo ind = inimigos.get(i);
+			ind.draw(g);	
+		}
 		
 		// Draw attacks
 		for(int i = 0; i < aliados.size(); i++) {
@@ -178,23 +192,27 @@ public class GamePanel extends JPanel implements ActionListener {
 			}
 		}
 		
+		// Painel de Moedas
+			g.drawImage(new ImageIcon("img\\Sprites\\sHudMoedas.png").getImage(), 20, 10, this);
+			
+		
 		// botao pause
 		if (pausa == false) {
-			g.drawImage(new ImageIcon("img\\sBtnPausa.png").getImage(), SCREEN_WIDTH - 120, 20, this);
+			g.drawImage(new ImageIcon("img\\Sprites\\sBtnPausa.png").getImage(), SCREEN_WIDTH - 120, 20, this);
 		}
 		
 		if (pausa) {
-			g.drawImage(new ImageIcon("img\\backgroundPause.jpeg").getImage(), 0, 0, this);
-			g.drawImage(new ImageIcon("img\\sBtnAvancar.png").getImage(), SCREEN_WIDTH - 120, 20, this);
+			g.drawImage(new ImageIcon("img\\Backgrounds\\backgroundPause.jpeg").getImage(), 0, 0, this);
+			g.drawImage(new ImageIcon("img\\Sprites\\sBtnAvancar.png").getImage(), SCREEN_WIDTH - 120, 20, this);
 			
 
-			g.drawImage(new ImageIcon("img\\sBtnReset.png").getImage(), SCREEN_WIDTH/2 + 96, SCREEN_HEIGHT/2 - 36, this);
-			g.drawImage(new ImageIcon("img\\sBtnHome.png").getImage(), SCREEN_WIDTH/2 - 96, SCREEN_HEIGHT/2 + 72, this);
+			g.drawImage(new ImageIcon("img\\Sprites\\sBtnReset.png").getImage(), SCREEN_WIDTH/2 + 96, SCREEN_HEIGHT/2 - 36, this);
+			g.drawImage(new ImageIcon("img\\Sprites\\sBtnHome.png").getImage(), SCREEN_WIDTH/2 - 96, SCREEN_HEIGHT/2 + 72, this);
 			
 			if(musica) {
-				g.drawImage(new ImageIcon("img\\sBtnSomOn.png").getImage(), SCREEN_WIDTH/3 - 96, SCREEN_HEIGHT/2 - 36, this);
+				g.drawImage(new ImageIcon("img\\Sprites\\sBtnSomOn.png").getImage(), SCREEN_WIDTH/3 - 96, SCREEN_HEIGHT/2 - 36, this);
 			}else {
-				g.drawImage(new ImageIcon("img\\sBtnSomOff.png").getImage(), SCREEN_WIDTH/3 - 96, SCREEN_HEIGHT/2 - 36, this);
+				g.drawImage(new ImageIcon("img\\Sprites\\sBtnSomOff.png").getImage(), SCREEN_WIDTH/3 - 96, SCREEN_HEIGHT/2 - 36, this);
 			}
 		}
 		
@@ -252,13 +270,15 @@ public class GamePanel extends JPanel implements ActionListener {
 		
 		
 		if(e.getSource().equals(timerSpawn)) {
-			//inimigos.add(new Inimigo(SCREEN_WIDTH-50, 280 + 1/*random.nextInt(1)*/*100));
-			//addPositionInd(inimigos.get(inimigos.size()-1).getY());
+			inimigos.add(new Inimigo(SCREEN_WIDTH-50, 280 + 1/*random.nextInt(1)*/*100, "sInimigo1"));
+			addPositionInd(inimigos.get(inimigos.size()-1).getY());
 		}
 		
 		if(e.getSource().equals(timerAttack)) {
 			for(int i = 0; i < aliados.size(); i++) {
-				aliados.get(i).addAtaque(positionIni);
+				if(aliados.get(i).getToAtaca()) {
+					aliados.get(i).addAtaque(positionIni, aliados.get(i).getTipoAliado());
+				}
 			}
 		}
 		
@@ -303,7 +323,39 @@ public class GamePanel extends JPanel implements ActionListener {
 		public void mousePressed(MouseEvent e) {
 			if (e.getX() > 25 && e.getX() < 125) {
 				if(e.getY() > 100 && e.getY() < 200) {
-					aliados.add(new Aliado(e.getX()-50, e.getY()-50));
+					aliados.add(new Aliado(e.getX()-50, e.getY()-50, "Flor", false));
+					for(int i = 0; i < inimigos.size(); i++) {
+						Inimigo ini = inimigos.get(i);
+						ini.setAliados(aliados);
+					}
+				}
+				
+				if(e.getY() > 200 && e.getY() < 300) {
+					aliados.add(new Aliado(e.getX()-50, e.getY()-50, "Cobra", true));
+					for(int i = 0; i < inimigos.size(); i++) {
+						Inimigo ini = inimigos.get(i);
+						ini.setAliados(aliados);
+					}
+				}
+				
+				if(e.getY() > 300 && e.getY() < 400) {
+					aliados.add(new Aliado(e.getX()-50, e.getY()-50, "Aranha", true));
+					for(int i = 0; i < inimigos.size(); i++) {
+						Inimigo ini = inimigos.get(i);
+						ini.setAliados(aliados);
+					}
+				}
+				
+				if(e.getY() > 400 && e.getY() < 500) {
+					aliados.add(new Aliado(e.getX()-50, e.getY()-50, "Tucano", true));
+					for(int i = 0; i < inimigos.size(); i++) {
+						Inimigo ini = inimigos.get(i);
+						ini.setAliados(aliados);
+					}
+				}
+				
+				if(e.getY() > 500 && e.getY() < 600) {
+					aliados.add(new Aliado(e.getX()-50, e.getY()-50, "Cacto", false));
 					for(int i = 0; i < inimigos.size(); i++) {
 						Inimigo ini = inimigos.get(i);
 						ini.setAliados(aliados);

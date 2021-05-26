@@ -10,12 +10,13 @@ import javax.swing.Timer;
 public class Ataque extends Personagens implements ActionListener{
 	private Timer timer;
 	
-	public Ataque(int x, int y) {
-		super(x, y, 999, "img\\sBullet.png");
+	public Ataque(int x, int y, String nomeAtaque) {
+		super(x, y, 999, "Ataques", "sAtaqueAliado"+nomeAtaque);
 		
 		timer = new Timer(1, this);
 		timer.start();
 	}
+	
 	@Override
 	public void draw(Graphics g) {
 		g.drawImage(this.getImg(), this.getX(), this.getY(), null);
