@@ -22,7 +22,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+import Pck_Menu.Derrota;
 import Pck_Menu.Home;
+import Pck_Menu.Vitoria;
 
 import java.awt.event.MouseAdapter;
 
@@ -39,7 +41,7 @@ public class GamePanel extends JPanel implements ActionListener {
 	private int mX, mY;
 	private int money = 500;
 	private int attackDamage;
-	private int tempo;
+	private int tempo = 180;
 	
 	private boolean pausa = false;
 	private boolean fechar = false;
@@ -53,6 +55,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
 	// MÉTODO CONSTRUTOR
 	public GamePanel() {
+		
 		this.setBackground(Color.black);
 		this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
 		this.setFocusable(true);
@@ -60,7 +63,7 @@ public class GamePanel extends JPanel implements ActionListener {
 		this.addMouseMotionListener(mList);
 		
 		
-		timer = new Timer(1, this);
+		timer = new Timer(5, this);
 		timer.start();
 		
 		timerSpawn1 = new Timer(6000, this);
@@ -179,7 +182,7 @@ public class GamePanel extends JPanel implements ActionListener {
 		g2d.setColor(Color.black);
 		g2d.setFont(new Font("Monospaced", Font.BOLD, 50));
 		g2d.drawString("" + money, 110, 70);
-		g2d.drawString("" + tempo, 300, 70);
+		g2d.drawString(tempo/60 + ":" + tempo%60, 300, 70);
 		g2d.setFont(new Font("Sans", Font.BOLD, 26));
 		for(int i = 0; i < 5; i++) {
 			g2d.drawString("Custo", 110, SCREEN_HEIGHT-65-(90*i));
@@ -238,7 +241,8 @@ public class GamePanel extends JPanel implements ActionListener {
 		inimigos = new ArrayList<Inimigo>();
 		aliados = new ArrayList<Aliado>();
 		matrizMapa = new int[4][7];
-		tempo = 0;
+		tempo = 180;
+		money = 500;
 	}
 
 	@Override
@@ -246,9 +250,11 @@ public class GamePanel extends JPanel implements ActionListener {
 		
 		for(int i = 0; i < inimigos.size(); i++) {
 			Inimigo ind = inimigos.get(i);
-			if (ind.getWidth()+ind.getX() < 0) {
+			if (ind.getWidth()+ind.getX() < 290) {
 				removePositionInd(ind.getY());
 				inimigos.remove(ind);
+				fechar = true;
+				new Derrota().setVisible(true);
 			}else {
 				ind.move();
 			}
@@ -270,26 +276,25 @@ public class GamePanel extends JPanel implements ActionListener {
 				}
 			}
 		}
+		if(tempo == 0) {
+			fechar = true;
+			new Vitoria().setVisible(true);
+		}
 		
 		
-		if(tempo == 100 && timerSpawn2.isRunning() == false) {
+		if(tempo == 170 && timerSpawn2.isRunning() == false) {
+			timerSpawn1 = new Timer(2000, this);
+			timerSpawn1.start();
+		}
+		
+		if(tempo == 120 && timerSpawn3.isRunning() == false) {
 			timerSpawn2.start();
-			if(timerSpawn1.getInitialDelay() == 3000) {
-				timerSpawn1 = new Timer(3000, this);
-				timerSpawn1.start();
-			}
+			timerSpawn1 = new Timer(3000, this);
+			timerSpawn1.start();
 		}
 		
-		if(tempo == 170 && timerSpawn3.isRunning() == false) {
-			timerSpawn3.start();
-			if(timerSpawn1.getInitialDelay() == 3000) {
-				timerSpawn1 = new Timer(2000, this);
-				timerSpawn1.start();
-			}
-		}
-		
-		if(tempo == 250 && timerSpawn1.getInitialDelay() == 2000) {
-			timerSpawn1 = new Timer(1000, this);
+		if(tempo == 60 && timerSpawn1.getInitialDelay() == 2000) {
+			timerSpawn1 = new Timer(2000, this);
 			timerSpawn1.start();
 			timerSpawn2 = new Timer(2000, this);
 			timerSpawn2.start();
@@ -303,16 +308,16 @@ public class GamePanel extends JPanel implements ActionListener {
 		}
 		
 		if(e.getSource().equals(timerSpawn2)) {
-			inimigos.add(new Inimigo(SCREEN_WIDTH-50, 250 + random.nextInt(4)*100, 200, "sInimigo2"));
+			inimigos.add(new Inimigo(SCREEN_WIDTH-50, 250 + random.nextInt(4)*100, 250, "sInimigo2"));
 			addPositionInd(inimigos.get(inimigos.size()-1).getY());
 		}
 		
 		if(e.getSource().equals(timerSpawn3)) {
-			inimigos.add(new Inimigo(SCREEN_WIDTH-50, 250 + random.nextInt(4)*100, 300, "sInimigo3"));
+			inimigos.add(new Inimigo(SCREEN_WIDTH-50, 250 + random.nextInt(4)*100, 500, "sInimigo3"));
 			addPositionInd(inimigos.get(inimigos.size()-1).getY());
 		}
 		if(e.getSource().equals(timerAttack)) {
-			tempo++;
+			tempo--;
 			for(int i = 0; i < aliados.size(); i++) {
 				if(aliados.get(i).getToAtaca()) {
 					aliados.get(i).addAtaque(positionIni, aliados.get(i).getTipoAliado());
