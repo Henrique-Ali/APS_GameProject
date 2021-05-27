@@ -1,9 +1,7 @@
 package Pck_Game;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-
 import javax.swing.ImageIcon;
 
 public abstract class Personagens {
@@ -12,7 +10,6 @@ public abstract class Personagens {
 	private double maxLife, life;
 	private Image img;
 
-	
 	public Personagens(int x, int y,int maximumLife, String tipoPersonagem, String nomePersonagem) {
 		this.x = x;
 		this.y = y;
@@ -26,56 +23,34 @@ public abstract class Personagens {
 		height = img.getHeight(null);
 	}
 	
-	public void draw(Graphics g) {
+	public void draw(Graphics g) { // BARRA DE VIDA DOS PERSONAGENS
 		g.drawImage(img, x, y, null);
 		g.setColor(Color.black);
 		g.fillRect(this.getX(), this.getY() - 15, 100, 15);
-		g.setColor(Color.green);
-		g.fillRect(this.getX()+1, this.getY() - 14, (int)((life / maxLife)*98), 13);
+		
+		if((int)((life / maxLife)*98) < 30) {
+			g.setColor(Color.red);
+			g.fillRect(this.getX()+1, this.getY() - 14, (int)((life / maxLife)*98), 13);
+		}else {
+			g.setColor(Color.green);
+			g.fillRect(this.getX()+1, this.getY() - 14, (int)((life / maxLife)*98), 13);
+		}
 	}
+	
+	public int getX() { return x;}
+	public void setX(int x) {this.x = x;}
+	
+	public int getY() { return y;}
+	public void setY(int y) { this.y = y; }
+	
+	public double getMaxLife() {return maxLife;}
+	
+	public double getLife() { return life;}
+	public void setLife(int life) { this.life = life;}
+	
+	public int getWidth() { return width;}
 
-	public int getX() {
-		return x;
-	}
-	public void setX(int x) {
-		this.x = x;
-	}
-
+	public int getHeight() {return height;}
 	
-	public int getY() {
-		return y;
-	}
-	public void setY(int y) {
-		this.y = y;
-	}
-	
-	
-	public double getMaxLife() {
-		return maxLife;
-	}
-	
-	
-	public double getLife() {
-		return life;
-	}
-	public void setLife(int life) {
-		this.life = life;
-	}
-	
-	
-	public int getWidth() {
-		return width;
-	}
-
-	
-	public int getHeight() {
-		return height;
-	}
-	
-	
-	public Image getImg() {
-		return img;
-	}
-	
-	
+	public Image getImg() {return img;}
 }

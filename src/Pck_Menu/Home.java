@@ -1,22 +1,18 @@
 package Pck_Menu;
 import Pck_Game.AudioPlayer;
-import  Pck_Game.GameFrame;
-
+import Pck_Game.GameFrame;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
-
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Home extends JFrame {
-
 	private JPanel contentPane;
 	private AudioPlayer mClick;
 	
-
 	public Home() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, 1280, 720);
@@ -36,8 +32,6 @@ public class Home extends JFrame {
         getContentPane().add(btnSobre);
         btnSobre.setAlignmentY(Component.BOTTOM_ALIGNMENT);
         btnSobre.setIcon(new ImageIcon("img\\Sprites\\sBtnSobre.png"));
-
-       
         
         JLabel background =new JLabel("");
         background.setBounds(0, 0, 1280, 720);
@@ -45,9 +39,7 @@ public class Home extends JFrame {
         background.setAlignmentY(Component.BOTTOM_ALIGNMENT);
         background.setIcon(new ImageIcon("img\\Backgrounds\\backgroundMenu.jpg"));
         
-        
-        // Start game
-        btnComecar.addMouseListener(new MouseAdapter() {
+        btnComecar.addMouseListener(new MouseAdapter() { // INICIAR JOGO
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mClick = new AudioPlayer("/Sounds/soundClick.wav");
@@ -57,8 +49,7 @@ public class Home extends JFrame {
 			}
 		});
         
-        // Btn Sobre
-        btnSobre.addMouseListener(new MouseAdapter() {
+        btnSobre.addMouseListener(new MouseAdapter() { // BOTÃO SOBRE
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mClick = new AudioPlayer("/Sounds/soundClick.wav");

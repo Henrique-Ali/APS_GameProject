@@ -1,41 +1,33 @@
 package Pck_Game;
-
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
-import javax.swing.ImageIcon;
-import javax.swing.Timer;
+import  java.awt.Graphics;
+import  java.awt.event.ActionEvent;
+import  java.awt.event.ActionListener;
+import  java.util.ArrayList;
+import  javax.swing.ImageIcon;
+import  javax.swing.Timer;
 
 public class Inimigo extends Personagens implements ActionListener{
-
 	private Timer timerUpdate, timerAtack;
 	private int state = 0;
 	private int damageAttack = 50;
+	private int[][] matrizMapa = new int[4][7];
 	private boolean atackAni = false;
+	private boolean lentidao = false;
 	private ArrayList<Aliado> aliados = new ArrayList<Aliado>();
 	private Aliado toAttack;
-	private int[][] matrizMapa = new int[4][7];
-	private boolean lentidao = false;
-	
 	
 	public Inimigo(int x, int y, int vida, String nomeInimigo) {
 		super(x, y, vida, "Inimigos", nomeInimigo);
 		
-		timerUpdate = new Timer(200, this);
-		timerAtack = new Timer(1000, this);
-		
+		timerUpdate = new Timer( 200, this);
+		timerAtack  = new Timer(1000, this);
 	}
 	
 	@Override
 	public void draw(Graphics g) {
-//		if (toAttack != null) {
-//			g.drawString( toAttack.toString(), getX() + 120, getY());
-//		}
 		super.draw(g);
 		if (atackAni) {
-			g.drawImage(new ImageIcon("img\\inimigos\\sCorte.png").getImage(), getX()-40, getY()+getHeight()/2-40, null);
+			g.drawImage(new ImageIcon("img\\inimigos\\sMachado.png").getImage(), getX()-40, getY()+getHeight()/2-40, null);
 		}
 	}
 	
@@ -54,7 +46,6 @@ public class Inimigo extends Personagens implements ActionListener{
 		if (e.getSource().equals(timerUpdate)) {
 			atackAni = false;
 			timerUpdate.stop();
-
 		}
 		if (e.getSource().equals(timerAtack)) {
 			if (toAttack.getLife() > damageAttack) {
@@ -68,7 +59,6 @@ public class Inimigo extends Personagens implements ActionListener{
 			}
 			atackAni = true;
 			timerUpdate.start();
-			
 		}
 	}
 	
@@ -84,28 +74,17 @@ public class Inimigo extends Personagens implements ActionListener{
 		}
 	}
 	
-	public void setAliados(ArrayList<Aliado> aliados) {
-		this.aliados = aliados;
-	}
-
-	public void setToAttack(Aliado toAttack) {
-		this.toAttack = toAttack;
-	}
-	
-	public Aliado getToAttack() {
-		return toAttack;
-	}
-	
 	public void stopTimers() {
 		timerUpdate.stop();
 		timerAtack.stop();
 	}
 
-	public void setMatrizMapa(int[][] matrizMapa) {
-		this.matrizMapa = matrizMapa;
-	}
+	public void setAliados(ArrayList<Aliado> aliados) { this.aliados = aliados;}
 
-	public void setLentidao(boolean lentidao) {
-		this.lentidao = lentidao;
-	}
+	public void setToAttack(Aliado toAttack) { this.toAttack = toAttack; }
+	public Aliado getToAttack() { return toAttack; }
+	
+	public void setMatrizMapa(int[][] matrizMapa) { this.matrizMapa = matrizMapa; }
+
+	public void setLentidao(boolean lentidao) { this.lentidao = lentidao; }
 }

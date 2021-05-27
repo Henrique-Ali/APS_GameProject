@@ -1,22 +1,18 @@
 package Pck_Menu;
-import Pck_Game.AudioPlayer;
+import  Pck_Game.AudioPlayer;
 import  Pck_Game.GameFrame;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.ImageIcon;
-
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import  javax.swing.JFrame;
+import  javax.swing.JPanel;
+import  javax.swing.JLabel;
+import  javax.swing.ImageIcon;
+import  java.awt.Color;
+import  java.awt.Component;
+import  java.awt.event.MouseAdapter;
+import  java.awt.event.MouseEvent;
 
 public class Vitoria extends JFrame {
-
 	private JPanel contentPane;
 	private AudioPlayer mClick;
-	
 
 	public Vitoria() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -38,18 +34,14 @@ public class Vitoria extends JFrame {
         getContentPane().add(btnHome);
         btnHome.setAlignmentY(Component.BOTTOM_ALIGNMENT);
         btnHome.setIcon(new ImageIcon("img\\Sprites\\sBtnHome.png"));
-
-       
-        
+  
         JLabel background = new JLabel("");
         background.setBounds(0, 0, 1280, 720);
         getContentPane().add(background);
         background.setAlignmentY(Component.BOTTOM_ALIGNMENT);
         background.setIcon(new ImageIcon("img\\Backgrounds\\backgroundVitoria.jpeg"));
-        
-        
-        // Start game
-        btnReset.addMouseListener(new MouseAdapter() {
+              
+        btnReset.addMouseListener(new MouseAdapter() { // REINICIAR O JOGO
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mClick = new AudioPlayer("/Sounds/soundClick.wav");
@@ -59,8 +51,7 @@ public class Vitoria extends JFrame {
 			}
 		});
         
-        // Btn Sobre
-        btnHome.addMouseListener(new MouseAdapter() {
+        btnHome.addMouseListener(new MouseAdapter() { // BOTÃO SOBRE
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mClick = new AudioPlayer("/Sounds/soundClick.wav");

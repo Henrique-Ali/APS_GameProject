@@ -1,13 +1,10 @@
 package Pck_Game;
-
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
-
 public class AudioPlayer {
-
 	private Clip clip;
 	
     public AudioPlayer(String s) {
@@ -23,7 +20,6 @@ public class AudioPlayer {
     	}
    
     }
-    
     public void play() {
     	if(clip == null) return;
     	stop();
@@ -36,11 +32,9 @@ public class AudioPlayer {
     	clip.setFramePosition(0);
     	clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
-
 	public void stop() {
 		if(clip.isRunning()) clip.stop();
 	}
-	
 	public void close() {
 		stop();
 		clip.close();

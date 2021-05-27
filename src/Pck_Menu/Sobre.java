@@ -1,22 +1,17 @@
 package Pck_Menu;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import Pck_Game.AudioPlayer;
 
 public class Sobre extends JFrame {
-
 	private JPanel contentPane;
-	static int sum = 0;
 	private AudioPlayer mClick;
-
+	static int sum = 0;
 
 	public Sobre() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -24,8 +19,7 @@ public class Sobre extends JFrame {
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setResizable(false);
-	    getContentPane().setLayout(null);
-	        
+	    	getContentPane().setLayout(null);
 				        JLabel btnVoltar = new JLabel("");
 				        btnVoltar.setBounds(468, 563, 80, 80);
 				        getContentPane().add(btnVoltar);
@@ -49,17 +43,14 @@ public class Sobre extends JFrame {
 	        	        getContentPane().add(background);
 	        	        background.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 	        	        background.setIcon(new ImageIcon("img\\Backgrounds\\backgroundSobre1.jpg"));
-	        	        
-	        	        
-	        	        
+	        	                
 	        	        btnCancelar.addMouseListener(new MouseAdapter() {
 				        	@Override
 				        	public void mouseClicked(MouseEvent e) {
 				        		mClick = new AudioPlayer("/Sounds/soundClick.wav");
 				        		mClick.play();
 				        		new Home().setVisible(true);
-				        		dispose();
-				        		
+				        		dispose();	
 				        	}
 				        });
 	        	        
@@ -80,10 +71,8 @@ public class Sobre extends JFrame {
 				        		background.setIcon(new ImageIcon(mudarTela(-1)));
 				        	}
 				        });
-	        	        
-	        	        
-	        	       
 	}
+	
 	public static String mudarTela(int x){
 		String telas[] = {"img\\Backgrounds\\backgroundSobre1.jpg", "img\\Backgrounds\\backgroundSobre2.jpg", "img\\Backgrounds\\backgroundSobre3.jpg"};
 		int ref = sum;
@@ -95,5 +84,4 @@ public class Sobre extends JFrame {
 		sum+=x;
 		return telas[sum];
     }
-
 }

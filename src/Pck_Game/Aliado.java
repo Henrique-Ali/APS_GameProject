@@ -1,36 +1,23 @@
 package Pck_Game;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.swing.Timer;
 
 public class Aliado extends Personagens{
-	private Timer timer;
 	private ArrayList<Ataque> ataque = new ArrayList<Ataque>();
 	private boolean toConstruct = false;
 	private boolean toAtaca;
 	private String tipoAliado;
 	
 	public Aliado(int x, int y, int vida, String nomeAliado, boolean b) {
-		super(x, y, vida, "Aliados", "sAliado"+nomeAliado);	
+		super(x, y, vida, "Aliados", "sAliado" + nomeAliado);	
 		tipoAliado = nomeAliado;
 		toAtaca = b;
 	}
 
-	public boolean isToConstruct() {
-		return toConstruct;
-	}
-
-	public void setToConstruct(boolean toConstruct) {
-		this.toConstruct = toConstruct;
-	}
+	public boolean isToConstruct() { return toConstruct; }
+	public void    setToConstruct(boolean toConstruct) { this.toConstruct = toConstruct; }
 	
-	public void addAtaque(int[] positionInd, String aliado) {
-		
+	public void addAtaque(int[] positionInd, String aliado) { // ADICIONA O ATAQUE DO ALIADO
 		if(this.getY() > 280 && toConstruct == true) {
 			int y = (this.getY()-280)/100;
 			if (positionInd[y] > 0) {
@@ -38,23 +25,12 @@ public class Aliado extends Personagens{
 			}
 		}
 	}
-	public void addAtaque(String vazio, String aliado) {
-		// Este aliado não ataca
-	}
+	public void addAtaque(String vazio, String aliado) {  }
 
-
-	public ArrayList<Ataque> getAtaque() {
-		return ataque;
-	}
-
-	public void setAtaque(ArrayList<Ataque> ataque) {
-		this.ataque = ataque;
-	}
+	public ArrayList<Ataque> getAtaque() { return ataque; }
+	public void setAtaque(ArrayList<Ataque> ataque) { this.ataque = ataque; }
 	
-	public String getTipoAliado() {
-		return tipoAliado;
-	}
-	public boolean getToAtaca() {
-		return toAtaca;
-	}
+	public String getTipoAliado() { return tipoAliado; }
+	
+	public boolean getToAtaca() { return toAtaca; }
 }
