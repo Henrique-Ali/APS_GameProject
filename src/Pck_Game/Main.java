@@ -3,7 +3,12 @@ import Pck_Menu.Home;
 
 public class Main {
 	public static void main(String[] args) {
-		//new GameFrame();
-		new Home().setVisible(true);
+
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+              
+            	new Home().setVisible(true);
+            }
+		});
 	}
 }
