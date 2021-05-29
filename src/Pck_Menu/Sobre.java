@@ -47,7 +47,7 @@ public class Sobre extends JFrame {
 	        	        btnCancelar.addMouseListener(new MouseAdapter() {
 				        	@Override
 				        	public void mouseClicked(MouseEvent e) {
-				        		mClick = new AudioPlayer("/Sounds/soundClick.wav");
+				        		mClick = new AudioPlayer("Sounds/soundClick.wav");
 				        		mClick.play();
 				        		new Home().setVisible(true);
 				        		dispose();	
@@ -57,7 +57,7 @@ public class Sobre extends JFrame {
 	        	        btnAvancar.addMouseListener(new MouseAdapter() {
 				        	@Override
 				        	public void mouseClicked(MouseEvent e) {
-				        		mClick = new AudioPlayer("/Sounds/soundClick.wav");
+				        		mClick = new AudioPlayer("Sounds/soundClick.wav");
 				        		mClick.play();
 				        		background.setIcon(new ImageIcon(mudarTela(1)));
 				        	}
@@ -66,7 +66,7 @@ public class Sobre extends JFrame {
 	        	        btnVoltar.addMouseListener(new MouseAdapter() {
 				        	@Override
 				        	public void mouseClicked(MouseEvent e) {
-				        		mClick = new AudioPlayer("/Sounds/soundClick.wav");
+				        		mClick = new AudioPlayer("Sounds/soundClick.wav");
 				        		mClick.play();
 				        		background.setIcon(new ImageIcon(mudarTela(-1)));
 				        	}

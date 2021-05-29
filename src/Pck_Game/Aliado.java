@@ -1,6 +1,5 @@
 package Pck_Game;
 import java.util.ArrayList;
-import javax.swing.Timer;
 
 public class Aliado extends Personagens{
 	private ArrayList<Ataque> ataque = new ArrayList<Ataque>();

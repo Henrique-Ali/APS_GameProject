@@ -10,7 +10,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Home extends JFrame {
-	private JPanel contentPane;
 	private AudioPlayer mClick;
 	
 	public Home() {
@@ -42,7 +41,7 @@ public class Home extends JFrame {
         btnComecar.addMouseListener(new MouseAdapter() { // INICIAR JOGO
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				mClick = new AudioPlayer("/Sounds/soundClick.wav");
+				mClick = new AudioPlayer("Sounds/soundClick.wav");
 				mClick.play();
 				new GameFrame().setVisible(true);
 				dispose();
@@ -52,7 +51,7 @@ public class Home extends JFrame {
         btnSobre.addMouseListener(new MouseAdapter() { // BOTÃO SOBRE
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				mClick = new AudioPlayer("/Sounds/soundClick.wav");
+				mClick = new AudioPlayer("Sounds/soundClick.wav");
 				mClick.play();
 				new Sobre().setVisible(true);
 				dispose();

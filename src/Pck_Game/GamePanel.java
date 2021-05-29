@@ -1,23 +1,11 @@
 package Pck_Game;
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+
+import java.awt.*;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Random;
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
-import javax.swing.Timer;
-import Pck_Menu.Derrota;
-import Pck_Menu.Home;
-import Pck_Menu.Vitoria;
+import javax.swing.*;
+import Pck_Menu.*;
 
 public class GamePanel extends JPanel implements ActionListener {
 	private ArrayList<Inimigo> inimigos = new ArrayList<Inimigo>();
@@ -58,7 +46,7 @@ public class GamePanel extends JPanel implements ActionListener {
 		
 		random = new Random();
 	
-		mMusic = new AudioPlayer("/Sounds/soundMusic.wav"); mMusic.loop();
+		mMusic = new AudioPlayer("Sounds/soundMusic.wav"); mMusic.loop();
 	}
 	
 	// MÉTODO PAUSA
@@ -169,10 +157,8 @@ public class GamePanel extends JPanel implements ActionListener {
 		if (pausa) {
 			g.drawImage(new ImageIcon("img\\Backgrounds\\backgroundPause.jpeg").getImage(), 0, 0, this);
 			g.drawImage(new ImageIcon("img\\Sprites\\sBtnAvancar.png").getImage(), SCREEN_WIDTH - 120, 20, this);
-			
 			g.drawImage(new ImageIcon("img\\Sprites\\sBtnReset.png").getImage(), SCREEN_WIDTH/2 + 96, SCREEN_HEIGHT/2 - 36, this);
 			g.drawImage(new ImageIcon("img\\Sprites\\sBtnHome.png").getImage(), SCREEN_WIDTH/2 - 96, SCREEN_HEIGHT/2 + 72, this);
-			
 			if(musica) {
 				g.drawImage(new ImageIcon("img\\Sprites\\sBtnSomOn.png").getImage(), SCREEN_WIDTH/3 - 96, SCREEN_HEIGHT/2 - 36, this);
 			}else {
@@ -187,10 +173,14 @@ public class GamePanel extends JPanel implements ActionListener {
 		inimigos = new ArrayList<Inimigo>();
 		aliados = new ArrayList<Aliado>();
 		matrizMapa = new int[4][7];
+		positionIni  = new int[4];
 		tempo = 180;
 		money = 500;
 		mMusic.stop();
 		mMusic.loop();
+		timer.restart();
+		timerSpawn1.restart();
+		timerAttack.restart();
 	}
 
 	@Override
@@ -205,9 +195,10 @@ public class GamePanel extends JPanel implements ActionListener {
 				timerSpawn1.stop();
 				timerSpawn2.stop();
 				timerSpawn3.stop();
-				fechar = true;
+				timerAttack.stop();
 				new Derrota().setVisible(true);
-			}else { ind.move(); }
+				fechar = true;
+			}
 		}
 		
 		for(int i = 0; i < inimigos.size(); i++) {
@@ -223,36 +214,12 @@ public class GamePanel extends JPanel implements ActionListener {
 							break;
 						}
 					}
-				}
+				}else { matrizMapa = ini.getMatrizMapa(); }
 			}
-		}
-		if(tempo == 0) {
-			fechar = true;
-			new Vitoria().setVisible(true);
-		}
-		
-		if(tempo == 170 && timerSpawn2.isRunning() == false) {
-			timerSpawn1 = new Timer(2000, this);
-			timerSpawn1.start();
-		}
-		
-		if(tempo == 120 && timerSpawn3.isRunning() == false) {
-			timerSpawn1 = new Timer(3000, this);
-			timerSpawn1.start();
-			timerSpawn2.start();
-		}
-		
-		if(tempo == 60 && timerSpawn1.getInitialDelay() == 2000) {
-			timerSpawn1 = new Timer(2000, this);
-			timerSpawn2 = new Timer(3000, this);
-			timerSpawn3 = new Timer(3000, this);
-			timerSpawn1.start();
-			timerSpawn2.start();
-			timerSpawn3.start();
 		}
 		
 		if(e.getSource().equals(timerSpawn1)) {
-			inimigos.add(new Inimigo(SCREEN_WIDTH-50, 250 + random.nextInt(4)*100, 200, "sInimigo1"));
+			inimigos.add(new Inimigo(SCREEN_WIDTH-50, 250 + random.nextInt(4)*100, 150, "sInimigo1"));
 			addPositionInd(inimigos.get(inimigos.size()-1).getY());
 		}
 		
@@ -262,11 +229,42 @@ public class GamePanel extends JPanel implements ActionListener {
 		}
 		
 		if(e.getSource().equals(timerSpawn3)) {
-			inimigos.add(new Inimigo(SCREEN_WIDTH-50, 250 + random.nextInt(4)*100, 100, "sInimigo3"));
+			inimigos.add(new Inimigo(SCREEN_WIDTH-50, 250 + random.nextInt(4)*100, 700, "sInimigo3"));
 			addPositionInd(inimigos.get(inimigos.size()-1).getY());
 		}
 		if(e.getSource().equals(timerAttack)) {
 			tempo--;
+			if(tempo == 170) {
+				timerSpawn1 = new Timer(2000, this);
+				timerSpawn1.start();
+			}
+			
+			if(tempo == 120) {
+				timerSpawn1 = new Timer(3000, this);
+				timerSpawn1.start();
+				timerSpawn2.start();
+			}
+			
+			if(tempo == 110) {
+				timerSpawn1 = new Timer(2000, this);
+				timerSpawn2 = new Timer(3000, this);
+				timerSpawn3 = new Timer(3000, this);
+				timerSpawn1.start();
+				timerSpawn2.start();
+				timerSpawn3.start();
+			}
+			
+			if(tempo == 0) {
+				pausa = true;
+				new Vitoria().setVisible(true);
+				fechar = true;
+				mMusic.stop();
+				timer.stop();
+				timerSpawn1.stop();
+				timerSpawn2.stop();
+				timerSpawn3.stop();
+				timerAttack.stop();
+			}
 			for(int i = 0; i < aliados.size(); i++) {
 				if(aliados.get(i).getToAtaca()) {
 					aliados.get(i).addAtaque(positionIni, aliados.get(i).getTipoAliado());
@@ -380,11 +378,17 @@ public class GamePanel extends JPanel implements ActionListener {
 			// Botão de Pausa e Continue
 			if (e.getX() > SCREEN_WIDTH - 120 && e.getX() < SCREEN_WIDTH - 40 && e.getY() > 20 && e.getY() < 100) {
 				if (pausa == false) {
+					mMusic.stop();
 					timer.stop();
 					timerSpawn1.stop();
 					timerSpawn2.stop();
 					timerSpawn3.stop();
+					timerAttack.stop();
 					pausa = true;
+					for(int i = 0; i < inimigos.size(); i++) {
+						Inimigo ini = inimigos.get(i);
+						ini.pausa(pausa);
+					}
 					for(int i = 0; i < aliados.size(); i++) {
 						Aliado ind = aliados.get(i);
 						for(int j = 0; j < ind.getAtaque().size(); j++) {
@@ -393,17 +397,19 @@ public class GamePanel extends JPanel implements ActionListener {
 						}
 					}	
 					if(musica == true) {
-						mClick = new AudioPlayer("/Sounds/soundClick1.wav");
+						mClick = new AudioPlayer("Sounds/soundClick1.wav");
 						mClick.play();
 					}
 					repaint();
-				}else if(pausa == true) {
+				}else {
+					mMusic.loop();
 					if(musica == true) {
-						mClick = new AudioPlayer("/Sounds/soundClick1.wav");
+						mClick = new AudioPlayer("Sounds/soundClick1.wav");
 						mClick.play();
 					}
 					timer.start();
 					timerSpawn1.start();
+					timerAttack.start();
 					if(tempo == 100) {
 						timerSpawn2.start();
 					}
@@ -418,12 +424,16 @@ public class GamePanel extends JPanel implements ActionListener {
 							atk.setPausa(pausa);
 						}
 					}
+					for(int i = 0; i < inimigos.size(); i++) {
+						Inimigo ini = inimigos.get(i);
+						ini.pausa(pausa);
+					}
 				}
 			// Botão Reset	
 			}else if (e.getX() > SCREEN_WIDTH/2 + 96 && e.getX() < SCREEN_WIDTH/2 + 268 && e.getY() > SCREEN_HEIGHT/2 - 36 && e.getY() < SCREEN_HEIGHT/2 + 36) {
 				if(pausa == true) {
 					if(musica == true) {
-						mClick = new AudioPlayer("/Sounds/soundClick1.wav");
+						mClick = new AudioPlayer("Sounds/soundClick1.wav");
 						mClick.play();
 					}
 					timer.start();
@@ -435,13 +445,13 @@ public class GamePanel extends JPanel implements ActionListener {
 			}else if (e.getX() > SCREEN_WIDTH/3 - 96 && e.getX() < SCREEN_WIDTH/3 + 72 && e.getY() > SCREEN_HEIGHT/2 - 36 && e.getY() < SCREEN_HEIGHT/2 + 36) {
 				if(pausa == true) {
 					if(musica) {
-						mClick = new AudioPlayer("/Sounds/soundClick1.wav");
+						mClick = new AudioPlayer("Sounds/soundClick1.wav");
 						mClick.play();
 						musica = false;
 						mMusic.stop();
 					}else {
 						musica = true;
-						mMusic = new AudioPlayer("/Sounds/soundMusic.wav");
+						mMusic = new AudioPlayer("Sounds/soundMusic.wav");
 						mMusic.loop();
 					}
 				}
@@ -450,7 +460,7 @@ public class GamePanel extends JPanel implements ActionListener {
 			}else if (e.getX() > SCREEN_WIDTH/2 - 96 && e.getX() < SCREEN_WIDTH/2 + 102 && e.getY() > SCREEN_HEIGHT/2 + 72 && e.getY() < SCREEN_HEIGHT/2 + 144) {
 				if(pausa == true) {
 					if(musica == true) {
-						mClick = new AudioPlayer("/Sounds/soundClick1.wav");
+						mClick = new AudioPlayer("Sounds/soundClick1.wav");
 						mClick.play();
 					}
 					new Home().setVisible(true);
@@ -464,7 +474,7 @@ public class GamePanel extends JPanel implements ActionListener {
 			for(int i = 0; i < aliados.size(); i++) {
 				Aliado ind = aliados.get(i);
 				if (ind.isToConstruct() == false) {
-					if(mX > 300 && mX < 1000 && mY > 280 && mY < SCREEN_HEIGHT-40) {
+					if(mX > 300 && mX < 1000 && mY > 280 && mY < SCREEN_HEIGHT-40 && matrizMapa[(mY-280)/100][(mX-300)/100] == 0) {
 						if(matrizMapa[(mY-280)/100][(mX-300)/100] == 0) {
 							matrizMapa[(mY-280)/100][(mX-300)/100] = 1;
 							ind.setX(300+(100*((mX-300)/100))-2);
@@ -474,7 +484,7 @@ public class GamePanel extends JPanel implements ActionListener {
 								Inimigo ini = inimigos.get(k);
 								ini.setMatrizMapa(matrizMapa);
 							}
-						}else { aliados.remove(i); }
+						}
 					}else {
 						switch (aliados.get(i).getTipoAliado()) {
 						case "Flor":   money += 100; break;

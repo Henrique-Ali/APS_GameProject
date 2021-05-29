@@ -7,7 +7,7 @@ import  javax.swing.ImageIcon;
 import  javax.swing.Timer;
 
 public class Inimigo extends Personagens implements ActionListener{
-	private Timer timerUpdate, timerAtack;
+	private Timer timerUpdate, timerAtack, timer;
 	private int state = 0;
 	private int damageAttack = 50;
 	private int[][] matrizMapa = new int[4][7];
@@ -18,9 +18,10 @@ public class Inimigo extends Personagens implements ActionListener{
 	
 	public Inimigo(int x, int y, int vida, String nomeInimigo) {
 		super(x, y, vida, "Inimigos", nomeInimigo);
-		
 		timerUpdate = new Timer( 200, this);
 		timerAtack  = new Timer(1000, this);
+		timer = new Timer(5, this);
+		timer.start();
 	}
 	
 	@Override
@@ -30,19 +31,19 @@ public class Inimigo extends Personagens implements ActionListener{
 			g.drawImage(new ImageIcon("img\\inimigos\\sMachado.png").getImage(), getX()-40, getY()+getHeight()/2-40, null);
 		}
 	}
-	
-	public void move() {
-		if (state == 0) {
-			if(lentidao == false) {
-				setX(getX()-2);
-			}else {
-				setX(getX()-1);
-			}
-		}
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource().equals(timer)) {
+			if (state == 0) {
+				setX(getX()-2);
+				if(lentidao == false) {
+					timer.setDelay(5);
+				}else {
+					timer.setDelay(20);
+				}
+			}
+		}
 		if (e.getSource().equals(timerUpdate)) {
 			atackAni = false;
 			timerUpdate.stop();
@@ -78,13 +79,24 @@ public class Inimigo extends Personagens implements ActionListener{
 		timerUpdate.stop();
 		timerAtack.stop();
 	}
-
+	public void pausa(boolean pausa) {
+		if(pausa) {
+			timerUpdate.stop();
+			timerAtack .stop();
+			timer.stop();
+		}else {
+			timerUpdate.start();
+			timerAtack .start();
+			timer.start();
+		}
+	}
 	public void setAliados(ArrayList<Aliado> aliados) { this.aliados = aliados;}
 
 	public void setToAttack(Aliado toAttack) { this.toAttack = toAttack; }
 	public Aliado getToAttack() { return toAttack; }
 	
 	public void setMatrizMapa(int[][] matrizMapa) { this.matrizMapa = matrizMapa; }
+	public int[][] getMatrizMapa() { return this.matrizMapa; }
 
 	public void setLentidao(boolean lentidao) { this.lentidao = lentidao; }
 }
